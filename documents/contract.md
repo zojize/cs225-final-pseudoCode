@@ -7,7 +7,8 @@
 2. **Assistance** 
     - Group Chat
 3. **Respect** 
-    - f
+    - we will discuss as a whole team and communicate with each other and everyone's opinion will be respected.
+    - We will accept everyone's ideas and not interrupt others, and violators will have to buy water for everyone in the next meeting
 
 ## Collaboration
 
