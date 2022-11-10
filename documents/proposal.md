@@ -16,13 +16,13 @@ Data of airport and route:
 ## Data Format
 
 - <https://openflights.org/data.html>
-  - comma separated entries in `.csv` format containing data about airline information, routes, airports, etc.
+    - comma separated entries in `.csv` format containing data about airline information, routes, airports, etc.
 - [Airports](https://raw.githubusercontent.com/jpatokal/openflights/master/data/airports.dat)
-  - `.csv` format data containing information about airports
-  - Entries: `Airport ID, Name, City, Country, IATA, ICAO, Latitude, Longitude, Altitude, Timezone, DST, Tz database time zone, Type, Source` 
+    - `.csv` format data containing information about airports
+    - Entries: `Airport ID, Name, City, Country, IATA, ICAO, Latitude, Longitude, Altitude, Timezone, DST, Tz database time zone, Type, Source`
 - [Routes](https://raw.githubusercontent.com/jpatokal/openflights/master/data/routes.dat)
-  - `.csv` format data containing information about routes
-  - Entries: `Airline, Airline ID, Source airport, Source airport ID, Destination airport, Destination airport ID, Codeshare, Stops, Equipment`
+    - `.csv` format data containing information about routes
+    - Entries: `Airline, Airline ID, Source airport, Source airport ID, Destination airport, Destination airport ID, Codeshare, Stops, Equipment`
 - We will be using the airports' data as the vertices for our graph. It will be storing the airport's `Airport ID, Name, City, Country, Longitude, Altitude`. The routes data will be use as edges for our graph, and the euclidean distance between the source and destination will be used as the weight on our edges.
 
 ## Data Correction
@@ -41,13 +41,16 @@ Data of airport and route:
 ## Algorithm
 
 - `optional<vector<route>> find_shortest_path(airport_id source, airport_id destination);`
-  - `@returns` A sequence of routes to take to reach the designated airport from the source airport if the viable path is found, otherwise an empty value is return.
-  - `@param source` A starting airport id
-  - `@param destination` Destination airport id
-  - `@implementation` This function uses the A* search algorithm and has the worst case time complexity of $O(|E|)$ and worst case space complexity of $O(|V|)$. (where $|V|$ is the number of airports and $V$)
+    - Function efficiency: This function uses the A* search algorithm and has the worst case time complexity of $O(|E|)$ and worst case space complexity of $O(|V|)$. (where $|V|$ is the number of airports and $V$)
+    - Function input:
+        - `@param source` A starting airport id
+        - `@param destination` Destination airport id
+    - Function output: A sequence of routes to take to reach the designated airport from the source airport if the viable path is found, otherwise an empty value is return.
 
 - `void draw_path(canvas c, vector<route> path);`
-  - `@implementation` Projects the given path on to a world map on a designated canvas. Its time complexity is $O(n)$.
+    - Function efficiency: Projects the given path on to a world map on a designated canvas. Its time complexity is $O(n)$.
+    - Function input: A designated canvas and a path
+    - Function output: The output image show directly modify the input canvas
 
 ## Timeline (Approximate)
 
