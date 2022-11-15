@@ -2,6 +2,7 @@
 
 #include <cstddef>
 #include <fstream>
+#include <iostream>
 #include <iterator>
 #include <string>
 #include <vector>
@@ -37,6 +38,12 @@ public:
           ++i;
         } else if (c != '"')
           curr += c;
+      }
+      if (!curr.empty()) {
+        if (i >= _parsed.size())
+          _parsed.push_back(curr);
+        else
+          _parsed[i] = curr;
       }
       return _parsed;
     };
