@@ -5,6 +5,7 @@
 #include <vector>
 
 struct Airport {
+  Airport() = default;
   Airport(unsigned int id, std::string name, double latitude, double longitude);
   Airport(std::vector<std::string> const& entries);
 

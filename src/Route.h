@@ -5,6 +5,7 @@
 #include <vector>
 
 struct Route {
+  Route() = default;
   Route(unsigned int airline_id, unsigned int source_airport_id,
         unsigned int destination_airport_id);
   Route(std::vector<std::string> const& entries);

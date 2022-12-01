@@ -5,6 +5,7 @@
 #include <vector>
 
 struct Airline {
+  Airline() = default;
   Airline(unsigned int id, std::string name);
   Airline(std::vector<std::string> const& entries);
 
