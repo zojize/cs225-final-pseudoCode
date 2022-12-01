@@ -1,6 +1,8 @@
 #include "Graph.h"
 #include <stdexcept>
-
+#include <queue>
+#include <map>
+using namespace std;
 template <typename T>
 void Graph<T>::add_vertex(T v) {
   if (!contains_vertex(v))
@@ -60,6 +62,26 @@ std::vector<T> Graph<T>::get_adjacent(T v) {
 
   return adj;
 }
-
 template <typename T>
-void Graph<T>::bfs_walk(T start_node, std::vector<T>& v) {}
+vector<T> Graph<T>::bfs_walk(T start_node, std::vector<T>& v) {
+  vector<T> airports;
+  queue<T> BFS_queue;
+  map<T, bool> visited;
+  visited[start_node] = true;
+  BFS_queue.push(start_node);
+  while(!BFS_queue.empty()) {
+    start_node = BFS_queue.front();
+    vector<T> adj = get_adjacent(start_node);
+    if (adj.empty())
+      break;
+    airports.push_back(start_node);
+    BFS_queue.pop();
+    for(T it : adj) {
+      if (visited.find(it.first) == visited.end()){
+        visited[it.first] = true;
+        BFS_queue.push(it.first);
+      }
+    }
+  }
+  return airports;
+}

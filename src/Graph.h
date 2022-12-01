@@ -88,7 +88,8 @@ public:
    * @param start_node
    * @param v
    */
-  void bfs_walk(T start_node, std::vector<T>& v);
+  std::vector<T> bfs_walk(T start_node, std::vector<T>& v);
+
 
 private:
   std::unordered_map<T, std::unordered_map<T, Edge>> _adj_list;
