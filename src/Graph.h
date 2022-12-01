@@ -1,22 +1,38 @@
 #pragma once
 
+#include <iostream>
 #include <unordered_map>
 #include <vector>
-using namespace std;
+
+template <typename Graph>
+struct Edge {
+  using Vertex = typename Graph::Vertex;
+
+  Edge() = default;
+  Edge(Vertex source, Vertex destination, double weight);
+
+  Vertex source;
+  Vertex destination;
+  double weight;
+
+  bool operator==(Edge<Graph> const& other) const;
+};
+
+template <typename Graph>
+std::ostream& operator<<(std::ostream& os, Edge<Graph> const&);
+
+template <typename Graph>
+struct std::hash<Edge<Graph>> {
+  size_t operator()(Edge<Graph> const&) const;
+};
+
 template <typename T>
 class Graph {
 public:
-  Graph();
+  using Vertex = T;
+  using Edge = Edge<Graph>;
 
-  struct Edge {
-    Edge() = default;
-    Edge(T source, T destination, double weight)
-        : source(source), destination(destination), weight(weight){};
-
-    T source;
-    T destination;
-    double weight;
-  };
+  Graph() = default;
 
   /**
    * Adds a vertex to the graph
@@ -27,6 +43,11 @@ public:
    * remove a vertex of the graph
    */
   void remove_vertex(T v);
+
+  /**
+   * get all vertices
+   */
+  void get_all_vertices(std::vector<T>&) const;
 
   /**
    * Adds an edge to the graph
@@ -46,6 +67,11 @@ public:
   void remove_edge(T source, T destination);
 
   /**
+   * get all edges
+   */
+  void get_all_edges(std::vector<Edge>&) const;
+
+  /**
    * Gets the weight between two vertices
    *
    * @param source
@@ -53,7 +79,7 @@ public:
    * @return double
    * @throws std::range_error when vertices don't exist
    */
-  double get_edge_weight(T source, T destination);
+  double get_edge_weight(T source, T destination) const;
 
   /**
    * returns true if the edge exists, false otherwise
@@ -62,7 +88,7 @@ public:
    * @param destination
    * @return whether the graph contains this edge
    */
-  bool contains_edge(T source, T destination);
+  bool contains_edge(T source, T destination) const;
 
   /**
    * returns true if the vertex exists, false otherwise
@@ -70,7 +96,7 @@ public:
    * @param v
    * @return whether the graph contains this edge
    */
-  bool contains_vertex(T v);
+  bool contains_vertex(T v) const;
 
   /**
    * Gets outgoing adjacent vertices of a vertex
@@ -80,7 +106,7 @@ public:
    * @return whether the graph contains this edge
    * @throws std::range_error when the vertex don't exist
    */
-  std::vector<T> get_adjacent(T v);
+  std::vector<T> get_adjacent(T v) const;
 
   /**
    * performs a bfs walk to the graph
@@ -92,13 +118,6 @@ public:
 
 private:
   std::unordered_map<T, std::unordered_map<T, Edge>> _adj_list;
-
-  Edge new_(T& source, T& destination, double weight) {
-    if (_adj_list.find(source) != _adj_list.end() &&
-        _adj_list[source].find(destination) != _adj_list[source].end())
-      return _adj_list[source][destination];
-    return Edge{source, destination, weight};
-  };
 };
 
 #include "Graph.hpp"

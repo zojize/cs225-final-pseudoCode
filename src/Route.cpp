@@ -24,9 +24,9 @@ std::ostream& operator<<(std::ostream& os, const Route& r) {
 }
 
 size_t std::hash<Route>::operator()(const Route& r) const {
-  size_t res = 17;
-  res = res * 31 + hash<unsigned int>()(r.airline_id);
-  res = res * 31 + hash<unsigned int>()(r.source_airport_id);
-  res = res * 31 + hash<unsigned int>()(r.destination_airport_id);
-  return res;
+  size_t seed = 0;
+  hash_combine(seed, r.airline_id);
+  hash_combine(seed, r.source_airport_id);
+  hash_combine(seed, r.destination_airport_id);
+  return seed;
 }

@@ -5,6 +5,7 @@
 #include <vector>
 
 struct Airline {
+  Airline() = default;
   Airline(unsigned int id, std::string name);
   Airline(std::vector<std::string> const& entries);
 
@@ -14,11 +15,10 @@ struct Airline {
   bool operator==(Airline const& other) const;
 };
 
-std::ostream& operator<<(std::ostream& os, const Airline&);
+std::ostream& operator<<(std::ostream& os, Airline const&);
 
 // https://stackoverflow.com/a/17017281/14835397
 template <>
 struct std::hash<Airline> {
-  size_t operator()(const Airline&) const;
+  size_t operator()(Airline const&) const;
 };
-

@@ -5,6 +5,7 @@
 #include <vector>
 
 struct Route {
+  Route() = default;
   Route(unsigned int airline_id, unsigned int source_airport_id,
         unsigned int destination_airport_id);
   Route(std::vector<std::string> const& entries);
@@ -20,5 +21,5 @@ std::ostream& operator<<(std::ostream& os, const Route& r);
 
 template <>
 struct std::hash<Route> {
-  size_t operator()(const Route& ap) const;
+  size_t operator()(Route const& ap) const;
 };

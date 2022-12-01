@@ -1,4 +1,5 @@
 #include "./Airline.h"
+#include "utils.h"
 
 Airline::Airline(unsigned int id, std::string name) : id(id), name(name) {}
 
@@ -14,8 +15,8 @@ std::ostream& operator<<(std::ostream& os, const Airline& a) {
 }
 
 size_t std::hash<Airline>::operator()(const Airline& a) const {
-  size_t res = 17;
-  res = res * 31 + hash<unsigned int>()(a.id);
-  res = res * 31 + hash<string>()(a.name);
-  return res;
+  size_t seed = 0;
+  hash_combine(seed, a.id);
+  hash_combine(seed, a.name);
+  return seed;
 }

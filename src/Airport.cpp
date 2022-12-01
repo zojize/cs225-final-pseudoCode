@@ -1,4 +1,5 @@
 #include "./Airport.h"
+#include "utils.h"
 
 Airport::Airport(unsigned int id, std::string name, double latitude,
                  double longitude)
@@ -20,10 +21,10 @@ std::ostream& operator<<(std::ostream& os, const Airport& a) {
 }
 
 size_t std::hash<Airport>::operator()(const Airport& a) const {
-  size_t res = 17;
-  res = res * 31 + hash<unsigned int>()(a.id);
-  res = res * 31 + hash<string>()(a.name);
-  res = res * 31 + hash<double>()(a.latitude);
-  res = res * 31 + hash<double>()(a.longitude);
-  return res;
+  size_t seed = 0;
+  hash_combine(seed, a.id);
+  hash_combine(seed, a.name);
+  hash_combine(seed, a.latitude);
+  hash_combine(seed, a.longitude);
+  return seed;
 }
