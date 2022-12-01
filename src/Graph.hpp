@@ -1,6 +1,7 @@
 #include "Graph.h"
 #include "utils.h"
 
+#include <map>
 #include <queue>
 #include <stdexcept>
 #include <unordered_set>
@@ -31,9 +32,6 @@ size_t std::hash<Edge<Graph>>::operator()(Edge<Graph> const& e) const {
   hash_combine(seed, e.weight);
   return seed;
 }
-
-template <typename T>
-Graph<T>::Graph() {}
 
 template <typename T>
 void Graph<T>::add_vertex(T v) {
@@ -125,7 +123,9 @@ std::vector<T> Graph<T>::get_adjacent(T v) const {
  * @param start_node
  */
 template <typename T>
-vector<T> Graph<T>::bfs_walk(T start_node) {
+std::vector<T> Graph<T>::bfs_walk(T start_node) {
+  using namespace std;
+
   vector<T> airports;
   if (!contains_vertex(start_node))
     return airports;
