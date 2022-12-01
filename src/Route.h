@@ -21,5 +21,5 @@ std::ostream& operator<<(std::ostream& os, const Route& r);
 
 template <>
 struct std::hash<Route> {
-  size_t operator()(const Route& ap) const;
+  size_t operator()(Route const& ap) const;
 };
