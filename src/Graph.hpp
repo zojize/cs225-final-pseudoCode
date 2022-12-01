@@ -64,19 +64,19 @@ std::vector<T> Graph<T>::get_adjacent(T v) {
 }
 
 template <typename T>
-vector<T> Graph<T>::bfs_walk(T node, const Graph &graph) {
+vector<T> Graph<T>::bfs_walk(T start_node) {
   vector<T> airports;
   queue<T> BFS_queue;
   map<T, bool> visited;
-  visited[node] = true;
-  BFS_queue.push(node);
+  visited[start_node] = true;
+  BFS_queue.push(start_node);
   while(!BFS_queue.empty()) {
-    node = BFS_queue.front();
-    vector<T> adj = graph.get_adjacent(node);
-    if (adj.empty())
-      break;
-    airports.push_back(node);
+    start_node = BFS_queue.front();
+    vector<T> adj = get_adjacent(start_node);
+    airports.push_back(start_node);
     BFS_queue.pop();
+    if (adj.empty())
+      continue;
     for(T it : adj) {
       if (visited.find(it.first) == visited.end()){
         visited[it.first] = true;
