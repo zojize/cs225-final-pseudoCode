@@ -6,7 +6,7 @@ using namespace std;
 template <typename T>
 class Graph {
 public:
-  Graph() = default;
+  Graph();
 
   struct Edge {
     Edge() = default;
@@ -86,9 +86,15 @@ public:
    * performs a bfs walk to the graph
    *
    * @param start_node
-   * @param v
    */
-  vector<T> bfs_walk(T start_node);
+  std::vector<T> bfs_walk(T start_node);
+
+  /**
+   * test for bfs using simpler input
+   *
+   * @param start_node
+   */
+  std::vector<T> bfs_walk_test(T start_node);
 
 private:
   std::unordered_map<T, std::unordered_map<T, Edge>> _adj_list;
