@@ -1,5 +1,6 @@
 #pragma once
 
+#include <iostream>
 #include <unordered_map>
 #include <vector>
 
@@ -16,6 +17,9 @@ struct Edge {
 
   bool operator==(Edge<Graph> const& other) const;
 };
+
+template <typename Graph>
+std::ostream& operator<<(std::ostream& os, Edge<Graph> const&);
 
 template <typename Graph>
 struct std::hash<Edge<Graph>> {
@@ -41,6 +45,11 @@ public:
   void remove_vertex(T v);
 
   /**
+   * get all vertices
+   */
+  void get_all_vertices(std::vector<T>&) const;
+
+  /**
    * Adds an edge to the graph
    *
    * @param source
@@ -58,6 +67,11 @@ public:
   void remove_edge(T source, T destination);
 
   /**
+   * get all edges
+   */
+  void get_all_edges(std::vector<Edge>&) const;
+
+  /**
    * Gets the weight between two vertices
    *
    * @param source
@@ -65,7 +79,7 @@ public:
    * @return double
    * @throws std::range_error when vertices don't exist
    */
-  double get_edge_weight(T source, T destination);
+  double get_edge_weight(T source, T destination) const;
 
   /**
    * returns true if the edge exists, false otherwise
@@ -74,7 +88,7 @@ public:
    * @param destination
    * @return whether the graph contains this edge
    */
-  bool contains_edge(T source, T destination);
+  bool contains_edge(T source, T destination) const;
 
   /**
    * returns true if the vertex exists, false otherwise
@@ -82,7 +96,7 @@ public:
    * @param v
    * @return whether the graph contains this edge
    */
-  bool contains_vertex(T v);
+  bool contains_vertex(T v) const;
 
   /**
    * Gets outgoing adjacent vertices of a vertex
@@ -92,7 +106,7 @@ public:
    * @return whether the graph contains this edge
    * @throws std::range_error when the vertex don't exist
    */
-  std::vector<T> get_adjacent(T v);
+  std::vector<T> get_adjacent(T v) const;
 
 private:
   std::unordered_map<T, std::unordered_map<T, Edge>> _adj_list;

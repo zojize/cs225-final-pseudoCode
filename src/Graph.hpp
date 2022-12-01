@@ -1,9 +1,9 @@
 #include "Graph.h"
 #include "utils.h"
 
-#include <map>
 #include <queue>
 #include <stdexcept>
+#include <unordered_set>
 #include <vector>
 
 template <typename Graph>
@@ -15,6 +15,12 @@ bool Edge<Graph>::operator==(Edge<Graph> const& other) const {
   return this == &other ||
          (source == other.source && destination == other.destination &&
           weight == other.weight);
+}
+
+template <typename Graph>
+std::ostream& operator<<(std::ostream& os, Edge<Graph> const& e) {
+  return os << "Edge { " << e.source << " ==[" << e.weight << "]=> "
+            << e.destination << " }";
 }
 
 template <typename Graph>
@@ -44,6 +50,12 @@ void Graph<T>::remove_vertex(T v) {
 }
 
 template <typename T>
+void Graph<T>::get_all_vertices(std::vector<T>& v) const {
+  for (auto p : _adj_list)
+    v.push_back(p.first);
+}
+
+template <typename T>
 void Graph<T>::add_edge(T source, T destination, double weight) {
   add_vertex(source);
   // this doesn't work for some reason
@@ -58,30 +70,48 @@ void Graph<T>::remove_edge(T source, T destination) {
 }
 
 template <typename T>
-double Graph<T>::get_edge_weight(T source, T destination) {
+void Graph<T>::get_all_edges(std::vector<Edge>& v) const {
+  std::unordered_map<T, std::unordered_set<T>> seen;
+  for (auto const& p : _adj_list) {
+    for (auto const& p : p.second) {
+      auto& edge = p.second;
+      if (seen.find(edge.source) == seen.end() ||
+          seen[edge.source].find(edge.destination) == seen[edge.source].end()) {
+        v.push_back(edge);
+        if (seen.find(edge.source) == seen.end())
+          seen.insert({edge.source, {}});
+        seen[edge.source].insert(edge.destination);
+      }
+    }
+  }
+}
+
+template <typename T>
+double Graph<T>::get_edge_weight(T source, T destination) const {
   if (contains_edge(source, destination))
-    return _adj_list[source][destination].weight;
+    return _adj_list.at(source).at(destination).weight;
   throw std::range_error("non-existent edge");
 }
 
 template <typename T>
-bool Graph<T>::contains_edge(T source, T destination) {
+bool Graph<T>::contains_edge(T source, T destination) const {
   return (contains_vertex(source) &&
-          _adj_list[source].find(destination) != _adj_list[source].end());
+          _adj_list.at(source).find(destination) !=
+              _adj_list.at(source).end());
 }
 
 template <typename T>
-bool Graph<T>::contains_vertex(T v) {
+bool Graph<T>::contains_vertex(T v) const {
   return _adj_list.find(v) != _adj_list.end();
 }
 
 template <typename T>
-std::vector<T> Graph<T>::get_adjacent(T v) {
+std::vector<T> Graph<T>::get_adjacent(T v) const {
   if (!contains_vertex(v))
     return {};
 
   std::vector<T> adj;
-  for (auto p : _adj_list[v])
+  for (auto p : _adj_list.at(v))
     adj.push_back(p.first);
 
   return adj;
