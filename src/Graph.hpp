@@ -3,6 +3,10 @@
 #include <map>
 #include <queue>
 #include <vector>
+
+template <typename T>
+Graph<T>::Graph() { }
+
 template <typename T>
 void Graph<T>::add_vertex(T v) {
   if (!contains_vertex(v))
