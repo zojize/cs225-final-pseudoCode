@@ -4,6 +4,9 @@
 
 #include <vector>
 
+#include "CsvReader.h"
+
+using namespace std;
 template <typename T>
 void match_vector(std::vector<T> result, std::vector<T> answer) {
   REQUIRE(result.size() == answer.size());
@@ -41,3 +44,67 @@ TEST_CASE("Graph basics", "[graph]") {
     }
   }
 }
+
+TEST_CASE("BFS no node or edge", "[Graph]") {
+  Graph<int> g{};
+  vector<int> correct;
+  vector<int> bfs = g.bfs_walk(0);
+  REQUIRE(bfs == correct);
+}
+
+TEST_CASE("BFS one node with no edge", "[Graph]") {
+  Graph<int> g{};
+  g.add_vertex(0);
+  vector<int> correct{0};
+  vector<int> bfs = g.bfs_walk(0);
+  REQUIRE(bfs == correct);
+}
+
+TEST_CASE("BFS linked list start from head", "[Graph]") {
+  Graph<int> g{};
+  for (int i = 0; i < 5; i++) {
+    g.add_vertex(i);
+  }
+  g.add_edge(0, 1, 1);
+  g.add_edge(1, 2, 8);
+  g.add_edge(2, 3, 4);
+  g.add_edge(3, 4, 2);
+
+  vector<int> correct {0, 1, 2, 3, 4};
+
+  vector<int> bfs = g.bfs_walk(0);
+  REQUIRE(bfs == correct);
+}
+
+TEST_CASE("BFS linked list start in the mid", "[Graph]") {
+  Graph<int> g{};
+  for (int i = 0; i < 5; i++) {
+    g.add_vertex(i);
+  }
+  g.add_edge(0, 1, 1);
+  g.add_edge(1, 2, 8);
+  g.add_edge(2, 3, 4);
+  g.add_edge(3, 4, 2);
+
+  vector<int> correct {1, 2, 3, 4};
+
+  vector<int> bfs = g.bfs_walk(1);
+  REQUIRE(bfs == correct);
+}
+
+TEST_CASE("BFS linked list start in the end", "[Graph]") {
+  Graph<int> g{};
+  for (int i = 0; i < 5; i++) {
+    g.add_vertex(i);
+  }
+  g.add_edge(0, 1, 1);
+  g.add_edge(1, 2, 8);
+  g.add_edge(2, 3, 4);
+  g.add_edge(3, 4, 2);
+
+  vector<int> correct{4};
+
+  vector<int> bfs = g.bfs_walk(4);
+  REQUIRE(bfs == correct);
+}
+

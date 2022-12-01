@@ -108,6 +108,14 @@ public:
    */
   std::vector<T> get_adjacent(T v) const;
 
+  /**
+   * performs a bfs walk to the graph
+   *
+   * @param start_node
+   * @return bfs walk result
+   */
+  std::vector<T> bfs_walk(T start_node);
+
 private:
   std::unordered_map<T, std::unordered_map<T, Edge>> _adj_list;
 };
