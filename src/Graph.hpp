@@ -63,13 +63,20 @@ std::vector<T> Graph<T>::get_adjacent(T v) {
   return adj;
 }
 
+/**
+ * performs a bfs walk to the graph
+ *
+ * @param start_node
+ */
 template <typename T>
 vector<T> Graph<T>::bfs_walk(T start_node) {
   vector<T> airports;
+  if (!contains_vertex(start_node)) return airports;
   queue<T> BFS_queue;
   map<T, bool> visited;
   visited[start_node] = true;
   BFS_queue.push(start_node);
+  
   while(!BFS_queue.empty()) {
     start_node = BFS_queue.front();
     vector<T> adj = get_adjacent(start_node);
@@ -78,9 +85,9 @@ vector<T> Graph<T>::bfs_walk(T start_node) {
     if (adj.empty())
       continue;
     for(T it : adj) {
-      if (visited.find(it.first) == visited.end()){
-        visited[it.first] = true;
-        BFS_queue.push(it.first);
+      if (visited.find(it) == visited.end()){
+        visited[it] = true;
+        BFS_queue.push(it);
       }
     }
   }
