@@ -2,21 +2,33 @@
 
 #include <unordered_map>
 #include <vector>
-using namespace std;
+
+template <typename Graph>
+struct Edge {
+  using Vertex = typename Graph::Vertex;
+
+  Edge() = default;
+  Edge(Vertex source, Vertex destination, double weight);
+
+  Vertex source;
+  Vertex destination;
+  double weight;
+
+  bool operator==(Edge<Graph> const& other) const;
+};
+
+template <typename Graph>
+struct std::hash<Edge<Graph>> {
+  size_t operator()(Edge<Graph> const&) const;
+};
+
 template <typename T>
 class Graph {
 public:
+  using Vertex = T;
+  using Edge = Edge<Graph>;
+
   Graph() = default;
-
-  struct Edge {
-    Edge() = default;
-    Edge(T source, T destination, double weight)
-        : source(source), destination(destination), weight(weight){};
-
-    T source;
-    T destination;
-    double weight;
-  };
 
   /**
    * Adds a vertex to the graph
@@ -82,23 +94,8 @@ public:
    */
   std::vector<T> get_adjacent(T v);
 
-  /**
-   * performs a bfs walk to the graph
-   *
-   * @param start_node
-   * @param v
-   */
-  vector<T> bfs_walk(T start_node, const Graph &graph);
-
 private:
   std::unordered_map<T, std::unordered_map<T, Edge>> _adj_list;
-
-  Edge new_(T& source, T& destination, double weight) {
-    if (_adj_list.find(source) != _adj_list.end() &&
-        _adj_list[source].find(destination) != _adj_list[source].end())
-      return _adj_list[source][destination];
-    return Edge{source, destination, weight};
-  };
 };
 
 #include "Graph.hpp"
