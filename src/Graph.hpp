@@ -56,7 +56,7 @@ std::vector<T> Graph<T>::get_adjacent(T v) {
 
   std::vector<T> adj;
   for (auto p : _adj_list[v])
-    adj.push_back(p->first);
+    adj.push_back(p.first);
 
   return adj;
 }
