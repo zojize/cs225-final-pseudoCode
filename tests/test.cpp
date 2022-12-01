@@ -4,6 +4,9 @@
 
 #include <vector>
 
+#include "CsvReader.h"
+
+using namespace std;
 template <typename T>
 void match_vector(std::vector<T> result, std::vector<T> answer) {
   REQUIRE(result.size() == answer.size());
@@ -41,14 +44,6 @@ TEST_CASE("Graph basics", "[graph]") {
     }
   }
 }
-
-#include <catch2/catch_test_macros.hpp>
-#include "CsvReader.h"
-#include "Graph.h"
-#include <vector>
-#include <iostream>
-
-using namespace std;
 
 TEST_CASE("BFS no node or edge", "[Graph]") {
   Graph<int> g{};
