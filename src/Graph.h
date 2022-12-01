@@ -2,7 +2,7 @@
 
 #include <unordered_map>
 #include <vector>
-
+using namespace std;
 template <typename T>
 class Graph {
 public:
@@ -88,8 +88,7 @@ public:
    * @param start_node
    * @param v
    */
-  std::vector<T> bfs_walk(T start_node, std::vector<T>& v);
-
+  vector<T> bfs_walk(T start_node, const Graph &graph);
 
 private:
   std::unordered_map<T, std::unordered_map<T, Edge>> _adj_list;
