@@ -108,3 +108,28 @@ TEST_CASE("BFS linked list start in the end", "[Graph]") {
   REQUIRE(bfs == correct);
 }
 
+TEST_CASE("BFS: complex graph", "[Graph]") {
+  Graph<int> g{};
+  for (size_t i = 0; i < 10; i++) {
+    g.add_vertex(i);
+  }
+  g.add_edge(1, 0, 1);
+  g.add_edge(1, 3, 8);
+  g.add_edge(1, 2, 2);
+  g.add_edge(1, 5, 3);
+  g.add_edge(1, 7, 3);
+
+  g.add_edge(2, 3, 4);
+  g.add_edge(3, 4, 2);
+  g.add_edge(5, 6, 1);
+  g.add_edge(6, 7, 1);
+  g.add_edge(6, 9, 4);
+  g.add_edge(7, 1, 5);
+  g.add_edge(8, 9, 3);
+  g.add_edge(9, 8, 3);
+
+  vector<int> correct{1, 7, 5, 2, 3, 0, 6, 4, 9, 8};
+
+  vector<int> bfs = g.bfs_walk(1);
+  REQUIRE(bfs == correct);
+}
