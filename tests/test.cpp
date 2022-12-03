@@ -70,7 +70,7 @@ TEST_CASE("BFS linked list start from head", "[Graph]") {
   g.add_edge(2, 3, 4);
   g.add_edge(3, 4, 2);
 
-  vector<int> correct {0, 1, 2, 3, 4};
+  vector<int> correct{0, 1, 2, 3, 4};
 
   vector<int> bfs = g.bfs_walk(0);
   REQUIRE(bfs == correct);
@@ -86,7 +86,7 @@ TEST_CASE("BFS linked list start in the mid", "[Graph]") {
   g.add_edge(2, 3, 4);
   g.add_edge(3, 4, 2);
 
-  vector<int> correct {1, 2, 3, 4};
+  vector<int> correct{1, 2, 3, 4};
 
   vector<int> bfs = g.bfs_walk(1);
   REQUIRE(bfs == correct);
@@ -128,11 +128,11 @@ TEST_CASE("BFS: complex graph", "[Graph]") {
   g.add_edge(8, 9, 3);
   g.add_edge(9, 8, 3);
 
-  vector<int> correct{1, 7, 5, 2, 3, 0, 6, 4, 9, 8};
+  vector<int> correct{1, 0, 2, 3, 5, 7, 4, 6, 9, 8};
   vector<int> bfs = g.bfs_walk(1);
   REQUIRE(bfs == correct);
-  
-  vector<int> correct5 {5, 6, 9, 7, 8, 1, 2, 3, 0, 4};
+
+  vector<int> correct5{5, 6, 7, 9, 1, 8, 0, 2, 3, 4};
   vector<int> bfs5 = g.bfs_walk(5);
   REQUIRE(bfs5 == correct5);
 }

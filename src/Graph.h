@@ -1,7 +1,7 @@
 #pragma once
 
 #include <iostream>
-#include <unordered_map>
+#include <map>
 #include <vector>
 
 template <typename Graph>
@@ -117,7 +117,7 @@ public:
   std::vector<T> bfs_walk(T start_node);
 
 private:
-  std::unordered_map<T, std::unordered_map<T, Edge>> _adj_list;
+  std::map<T, std::map<T, Edge>> _adj_list;
 };
 
 #include "Graph.hpp"
