@@ -2,6 +2,7 @@
 #include "Graph.h"
 #include "Route.h"
 
+#include <iostream>
 #include <unordered_map>
 #include <utility>
 
@@ -20,12 +21,27 @@ using Labels =
     std::pair<std::unordered_map<T, TraversalLabel>,
               std::unordered_map<T, std::unordered_map<T, TraversalLabel>>>;
 
+std::ostream& operator<<(std::ostream& os, TraversalLabel const& labels);
+
 template <typename T>
-TraversalLabel get_label(Labels<T>& labels, T vertex);
+std::ostream& operator<<(std::ostream& os, Algorithms::Labels<T> const& labels);
+
 template <typename T>
-TraversalLabel get_label(Labels<T>& labels, T source, T destination);
+TraversalLabel get_label(Labels<T> const& labels, T vertex);
 template <typename T>
-TraversalLabel get_label(Labels<T>& labels, typename Graph<T>::Edge edge);
+TraversalLabel get_label(Labels<T> const& labels, T source, T destination);
+template <typename T>
+TraversalLabel get_label(Labels<T> const& labels, typename Graph<T>::Edge edge);
+
+template <typename T>
+void set_label(Algorithms::Labels<T>& labels, T vertex,
+               Algorithms::TraversalLabel label);
+template <typename T>
+void set_label(Algorithms::Labels<T>& labels, T source, T destination,
+               Algorithms::TraversalLabel label);
+template <typename T>
+void set_label(Algorithms::Labels<T>& labels, typename Graph<T>::Edge edge,
+               Algorithms::TraversalLabel label);
 
 template <typename T>
 void bfs_walk(Graph<T> const& g, Labels<T>&);

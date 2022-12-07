@@ -2,16 +2,54 @@
 
 #include "Graph.h"
 
+#include <iostream>
+#include <string>
 #include <vector>
 
+#include "Algorithms.h"
 #include "CsvReader.h"
 
 using namespace std;
+
+using Algorithms::TraversalLabel::CROSS;
+using Algorithms::TraversalLabel::DISCOVERY;
+using Algorithms::TraversalLabel::UNEXPLORED;
+using Algorithms::TraversalLabel::VISITED;
+
 template <typename T>
-void match_vector(std::vector<T> result, std::vector<T> answer) {
+void match_vector(std::vector<T> const& result, std::vector<T> const& answer) {
   REQUIRE(result.size() == answer.size());
   for (size_t i = 0; i < answer.size(); i++)
     REQUIRE(result[i] == answer[i]);
+}
+
+void build_char_graph(Graph<char>& g, string s) {
+  for (size_t i = 0; i < s.size(); i += 2) {
+    while (s[i] == ',' || s[i] == ' ')
+      i++;
+    g.add_edge(s[i], s[i + 1], 1);
+  }
+}
+
+template <typename T>
+void match_labels(Algorithms::Labels<T> const& result,
+                  Algorithms::Labels<T> const& answer) {
+  REQUIRE(result.first.size() == answer.first.size());
+  REQUIRE(result.second.size() == answer.second.size());
+
+  for (auto p : answer.first) {
+    REQUIRE(Algorithms::get_label(answer, p.first) ==
+            Algorithms::get_label(result, p.first));
+  }
+  for (auto p : answer.second) {
+    auto source = p.first;
+    REQUIRE(p.second.size() == result.second.at(source).size());
+    for (auto p : p.second) {
+      auto destination = p.first;
+      REQUIRE(get_label(answer, source, destination) ==
+              get_label(result, source, destination));
+    }
+  }
 }
 
 TEST_CASE("Graph basics", "[graph]") {
@@ -135,4 +173,36 @@ TEST_CASE("BFS: complex graph", "[Graph]") {
   vector<int> correct5{5, 6, 7, 9, 1, 8, 0, 2, 3, 4};
   vector<int> bfs5 = g.bfs_walk(5);
   REQUIRE(bfs5 == correct5);
+}
+
+/**
+ *    A
+ *   ↙ ↘
+ *  B ↔ C
+ *  ↓   ↓
+ *  D ↔ E
+ *
+ */
+TEST_CASE("BFS: graph labeling simple", "[Graph][BGS]") {
+
+  Graph<char> g;
+  string graph_repr = "AB,AC,BC,CB,BD,CE,DE";
+  build_char_graph(g, graph_repr);
+  Algorithms::Labels<char> labels;
+
+  Algorithms::Labels<char> answer;
+  for (char c : "ABCDE")
+    if (c)
+      set_label(answer, c, VISITED);
+  set_label(answer, 'D', 'E', UNEXPLORED);
+  set_label(answer, 'A', 'B', DISCOVERY);
+  set_label(answer, 'A', 'C', DISCOVERY);
+  set_label(answer, 'B', 'C', CROSS);
+  set_label(answer, 'B', 'D', DISCOVERY);
+  set_label(answer, 'C', 'B', CROSS);
+  set_label(answer, 'C', 'E', DISCOVERY);
+  set_label(answer, 'D', 'E', CROSS);
+
+  Algorithms::bfs_walk(g, labels);
+  match_labels(labels, answer);
 }
