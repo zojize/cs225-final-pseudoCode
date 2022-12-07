@@ -4,6 +4,7 @@
 #include <map>
 #include <queue>
 #include <stdexcept>
+#include <unordered_map>
 #include <unordered_set>
 #include <vector>
 
@@ -20,7 +21,7 @@ bool Edge<Graph>::operator==(Edge<Graph> const& other) const {
 
 template <typename Graph>
 std::ostream& operator<<(std::ostream& os, Edge<Graph> const& e) {
-  return os << "Edge { " << e.source << " ==[" << e.weight << "]=> "
+  return os << "Edge { " << e.source << " [" << e.weight << "]=> "
             << e.destination << " }";
 }
 
@@ -59,9 +60,8 @@ void Graph<T>::get_all_vertices(std::vector<T>& v) const {
 template <typename T>
 void Graph<T>::add_edge(T source, T destination, double weight) {
   add_vertex(source);
-  // this doesn't work for some reason
-  // _adj_list[source][destination] = Edge(source, destination, weight);
-  _adj_list[source].insert({destination, {source, destination, weight}});
+  add_vertex(destination);
+  _adj_list[source][destination] = Edge(source, destination, weight);
 }
 
 template <typename T>
