@@ -15,6 +15,7 @@ struct Airport {
   double longitude;
 
   bool operator==(Airport const& other) const;
+  bool operator<(Airport const& other) const;
 };
 
 std::ostream& operator<<(std::ostream& os, Airport const&);
