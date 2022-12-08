@@ -59,42 +59,11 @@ void Graph<T>::get_all_vertices(std::vector<T>& v) const {
     v.push_back(p.first);
 }
 
-
-template <typename T>
-void Graph<T>::add_edge(T source, T destination) {
-  add_vertex(source);
-  add_vertex(destination);
-  if (contains_vertex(source)) {
-    double weight = distance(source, destination);
-    _adj_list[source][destination] = Edge(source, destination, weight);
-  }
-}
-
 template <typename T>
 void Graph<T>::add_edge(T source, T destination, double weight) {
   add_vertex(source);
   add_vertex(destination);
   _adj_list[source][destination] = Edge(source, destination, weight);
-}
-
-template <typename T>
-double Graph<T>::distance(T source, T destination) {
-  // calculate in km
-  double lat1 = source.latitude;
-  double lon1 = source.longitude;
-  double lat2 = destination.latitude;
-  double lon2 = destination.longitude;
-
-  double r = 6371;        // radius of Earth (KM)
-  double p = M_PI / 180;  // Pi/180
-  double a = 0.5 - cos((lat2-lat1)*p)/2 + cos(lat1*p)*cos(lat2*p) * (1-cos((lon2-lon1)*p)) / 2;
-  double d = 2 * r * asin(sqrt(a)); // 2*R*asin
-
-  // round up to 4 decimal points
-  d *= 10000;
-  double roundUp = round(d);
-  roundUp /= 10000;
-  return roundUp;
 }
 
 template <typename T>
