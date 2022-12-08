@@ -1,11 +1,10 @@
 #include <catch2/catch_test_macros.hpp>
-
-#include "Graph.h"
-
 #include <iostream>
 #include <string>
 #include <vector>
 
+#include "Graph.h"
+#include "Airport.h"
 #include "Algorithms.h"
 #include "CsvReader.h"
 
@@ -15,6 +14,51 @@ using Algorithms::TraversalLabel::CROSS;
 using Algorithms::TraversalLabel::DISCOVERY;
 using Algorithms::TraversalLabel::UNEXPLORED;
 using Algorithms::TraversalLabel::VISITED;
+
+
+vector<string> airport_name_10() {
+  vector<string> names;
+  names.push_back("Goroka Airport");
+  names.push_back("Madang Airport");
+  names.push_back("Mount Hagen Kagamuga Airport");
+  names.push_back("Nadzab Airport");
+  names.push_back("Port Moresby Jacksons International Airport");
+  names.push_back("Wewak International Airport");
+  names.push_back("Narsarsuaq Airport");
+  names.push_back("Godthaab / Nuuk Airport");
+  names.push_back("Kangerlussuaq Airport");
+  names.push_back("Thule Air Base");
+  return names;
+}
+
+vector<double> airport_latitude_10() {
+  vector<double> latitude;
+  latitude.push_back(-6.081689834590001);
+  latitude.push_back(-5.20707988739);
+  latitude.push_back(-5.826789855957031);
+  latitude.push_back(-6.569803);
+  latitude.push_back(-9.443380355834961);
+  latitude.push_back(-3.58383011818);
+  latitude.push_back(61.1604995728);
+  latitude.push_back(64.19090271);
+  latitude.push_back(67.0122218992);
+  latitude.push_back(-68.7032012939);
+  return latitude;
+}
+vector<double> airport_longitude_10() {
+  vector<double> longitude;
+  longitude.push_back(145.391998291);
+  longitude.push_back(145.789001465);
+  longitude.push_back(144.29600524902344);
+  longitude.push_back(146.725977);
+  longitude.push_back(147.22000122070312);
+  longitude.push_back(143.669006348);
+  longitude.push_back(-45.4259986877);
+  longitude.push_back(-51.6781005859);
+  longitude.push_back(-50.7116031647);
+  longitude.push_back(-68.7032012939);
+  return longitude;
+} 
 
 template <typename T>
 void match_vector(std::vector<T> const& result, std::vector<T> const& answer) {
@@ -205,4 +249,41 @@ TEST_CASE("BFS: graph labeling simple", "[Graph][BGS]") {
 
   Algorithms::bfs_walk(g, labels);
   match_labels(labels, answer);
+}
+
+
+TEST_CASE("Graph: test vertices using small dataset", "[Graph") {
+  Graph<Airport> graph;
+  CsvReader airport("../tests/airports_test_10.csv");
+  // add airports
+  for (auto it : airport) {
+    int index = 0;
+    unsigned int id;   // Airports[0]
+    std::string name;  // Airports[1]
+    double latitude;   // Airports[6]
+    double longitude;  // Airports[7]
+    for (auto i : it) {
+      if (index == 0) id = stoi(i);
+      if (index == 1) name = i;
+      if (index == 6) latitude = stod(i);
+      if (index == 7) longitude = stod(i);
+      index++;
+    }
+    Airport airport(id, name, latitude, longitude);
+    graph.add_vertex(airport);
+  }
+  vector<Airport> vertices;
+  graph.get_all_vertices(vertices);
+
+  vector<string> correctNames = airport_name_10();
+  vector<double> correctLatitude = airport_latitude_10();
+  vector<double> correctLongitude = airport_longitude_10();
+
+  for (Airport a : vertices) {
+    int airportID = a.id;
+    REQUIRE(a.name == correctNames[airportID - 1]);
+    REQUIRE(a.latitude == correctLatitude[airportID - 1]);
+    REQUIRE(a.longitude == correctLongitude[airportID - 1]);
+    airportID++;
+  }
 }
