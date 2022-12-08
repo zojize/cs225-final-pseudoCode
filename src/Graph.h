@@ -56,7 +56,10 @@ public:
    * @param destination
    * @param weight
    */
+  void add_edge(T source, T destination);
   void add_edge(T source, T destination, double weight);
+  double distance(T source, T destination);
+
 
   /**
    * Removes an edge of the graph
