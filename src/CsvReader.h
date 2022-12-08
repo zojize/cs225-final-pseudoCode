@@ -20,7 +20,7 @@ public:
     using difference_type = std::ptrdiff_t;
     using value_type = std::remove_cv_t<T>;
     using pointer = T *;
-    using reference = T &;
+    using reference = T&;
 
     iterator() noexcept : _reader(nullptr){};
     iterator(CsvReader *r) noexcept : _reader(r){};
@@ -28,16 +28,20 @@ public:
     reference operator*() noexcept {
       std::string curr;
       size_t i = 0;
+      bool string_mode = false;
       for (char c : _reader->_current_line) {
-        if (c == ',') {
+        if (c == ',' && !string_mode) {
           if (i >= _parsed.size())
             _parsed.push_back(curr);
           else
             _parsed[i] = curr;
           curr = "";
           ++i;
-        } else if (c != '"')
+        } else if (c == '"') {
+          string_mode = !string_mode;
+        } else {
           curr += c;
+        }
       }
       if (!curr.empty()) {
         if (i >= _parsed.size())
@@ -54,10 +58,10 @@ public:
       return *this;
     };
 
-    bool operator==(const self_type &other) const noexcept {
+    bool operator==(self_type const& other) const noexcept {
       return !operator!=(other);
     }
-    bool operator!=(const self_type &other) const noexcept {
+    bool operator!=(self_type const& other) const noexcept {
       if (_reader && _reader->_eof)
         return false;
       return _reader != other._reader;
