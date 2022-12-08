@@ -287,3 +287,29 @@ TEST_CASE("Graph: test vertices using small dataset", "[Graph") {
     airportID++;
   }
 }
+
+TEST_CASE("Graph: correct weight using small database", "[Graph]") {
+  Graph<Airport> graph;
+  CsvReader airport("../tests/airports_test_10.csv");
+  // add airports
+  for (auto it : airport) {
+    int index = 0;
+    unsigned int id;   // Airports[0]
+    std::string name;  // Airports[1]
+    double latitude;   // Airports[6]
+    double longitude;  // Airports[7]
+    for (auto i : it) {
+      if (index == 0) id = stoi(i);
+      if (index == 1) name = i;
+      if (index == 6) latitude = stod(i);
+      if (index == 7) longitude = stod(i);
+      index++;
+    }
+    Airport airport(id, name, latitude, longitude);
+    graph.add_vertex(airport);
+  }
+  vector<Airport> vertices;
+  graph.get_all_vertices(vertices);
+  graph.add_edge(vertices[0], vertices[1]);
+  REQUIRE(graph.get_edge_weight(vertices[0], vertices[1]) == 106.7139);
+}
