@@ -20,6 +20,10 @@ std::ostream& operator<<(std::ostream& os, const Airport& a) {
             << ", " << a.longitude << " }";
 }
 
+bool Airport::operator<(Airport const& other) const {
+  return (latitude < other.latitude && longitude < other.longitude);
+}
+
 size_t std::hash<Airport>::operator()(const Airport& a) const {
   size_t seed = 0;
   hash_combine(seed, a.id);
