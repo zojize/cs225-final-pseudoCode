@@ -60,6 +60,25 @@ vector<double> airport_longitude_10() {
   return longitude;
 } 
 
+double distance(Airport source, Airport destination) {
+  // calculate in km
+  double lat1 = source.latitude;
+  double lon1 = source.longitude;
+  double lat2 = destination.latitude;
+  double lon2 = destination.longitude;
+
+  double r = 6371;        // radius of Earth (KM)
+  double p = M_PI / 180;  // Pi/180
+  double a = 0.5 - cos((lat2-lat1)*p)/2 + cos(lat1*p)*cos(lat2*p) * (1-cos((lon2-lon1)*p)) / 2;
+  double d = 2 * r * asin(sqrt(a)); // 2*R*asin
+
+  // round up to 4 decimal points
+  d *= 10000;
+  double roundUp = round(d);
+  roundUp /= 10000;
+  return roundUp;
+}
+
 template <typename T>
 void match_vector(std::vector<T> const& result, std::vector<T> const& answer) {
   REQUIRE(result.size() == answer.size());
@@ -251,24 +270,16 @@ TEST_CASE("BFS: graph labeling simple", "[Graph][BGS]") {
   match_labels(labels, answer);
 }
 
-
-TEST_CASE("Graph: test vertices using small dataset", "[Graph") {
+TEST_CASE("Test vertices using small dataset", "[Graph") {
   Graph<Airport> graph;
   CsvReader airport("../tests/airports_test_10.csv");
   // add airports
   for (auto it : airport) {
-    int index = 0;
-    unsigned int id;   // Airports[0]
-    std::string name;  // Airports[1]
-    double latitude;   // Airports[6]
-    double longitude;  // Airports[7]
-    for (auto i : it) {
-      if (index == 0) id = stoi(i);
-      if (index == 1) name = i;
-      if (index == 6) latitude = stod(i);
-      if (index == 7) longitude = stod(i);
-      index++;
-    }
+    unsigned int id = stoi(it[0]);   // Airports[0]
+    std::string name = it[1];  // Airports[1]
+    double latitude = stod(it[6]);   // Airports[6]
+    double longitude = stod(it[7]);  // Airports[7]
+
     Airport airport(id, name, latitude, longitude);
     graph.add_vertex(airport);
   }
@@ -293,23 +304,16 @@ TEST_CASE("Graph: correct weight using small database", "[Graph]") {
   CsvReader airport("../tests/airports_test_10.csv");
   // add airports
   for (auto it : airport) {
-    int index = 0;
-    unsigned int id;   // Airports[0]
-    std::string name;  // Airports[1]
-    double latitude;   // Airports[6]
-    double longitude;  // Airports[7]
-    for (auto i : it) {
-      if (index == 0) id = stoi(i);
-      if (index == 1) name = i;
-      if (index == 6) latitude = stod(i);
-      if (index == 7) longitude = stod(i);
-      index++;
-    }
+    unsigned int id = stoi(it[0]);   // Airports[0]
+    std::string name = it[1];  // Airports[1]
+    double latitude = stod(it[6]);   // Airports[6]
+    double longitude = stod(it[7]);  // Airports[7]
+
     Airport airport(id, name, latitude, longitude);
     graph.add_vertex(airport);
   }
   vector<Airport> vertices;
   graph.get_all_vertices(vertices);
-  graph.add_edge(vertices[0], vertices[1]);
+  graph.add_edge(vertices[0], vertices[1], distance(vertices[0], vertices[1]));
   REQUIRE(graph.get_edge_weight(vertices[0], vertices[1]) == 106.7139);
 }
