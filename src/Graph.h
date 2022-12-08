@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <map>
+#include <unordered_map>
 #include <vector>
 
 template <typename Graph>
@@ -37,12 +38,12 @@ public:
   /**
    * Adds a vertex to the graph
    */
-  void add_vertex(T v);
+  void add_vertex(T const& v);
 
   /**
    * remove a vertex of the graph
    */
-  void remove_vertex(T v);
+  void remove_vertex(T const& v);
 
   /**
    * get all vertices
@@ -56,8 +57,7 @@ public:
    * @param destination
    * @param weight
    */
-  void add_edge(T source, T destination, double weight);
-
+  void add_edge(T const& source, T const& destination, double weight);
 
   /**
    * Removes an edge of the graph
@@ -65,7 +65,7 @@ public:
    * @param source
    * @param destination
    */
-  void remove_edge(T source, T destination);
+  void remove_edge(T const& source, T const& destination);
 
   /**
    * get all edges
@@ -80,7 +80,7 @@ public:
    * @return double
    * @throws std::range_error when vertices don't exist
    */
-  double get_edge_weight(T source, T destination) const;
+  double get_edge_weight(T const& source, T const& destination) const;
 
   /**
    * returns true if the edge exists, false otherwise
@@ -89,7 +89,7 @@ public:
    * @param destination
    * @return whether the graph contains this edge
    */
-  bool contains_edge(T source, T destination) const;
+  bool contains_edge(T const& source, T const& destination) const;
 
   /**
    * returns true if the vertex exists, false otherwise
@@ -97,7 +97,7 @@ public:
    * @param v
    * @return whether the graph contains this edge
    */
-  bool contains_vertex(T v) const;
+  bool contains_vertex(T const& v) const;
 
   /**
    * Gets outgoing adjacent vertices of a vertex
@@ -107,7 +107,7 @@ public:
    * @return whether the graph contains this edge
    * @throws std::range_error when the vertex don't exist
    */
-  std::vector<T> get_adjacent(T v) const;
+  std::vector<T> get_adjacent(T const& v) const;
 
   /**
    * performs a bfs walk to the graph
@@ -118,7 +118,7 @@ public:
   std::vector<T> bfs_walk(T start_node);
 
 private:
-  std::map<T, std::map<T, Edge>> _adj_list;
+  std::unordered_map<T, std::unordered_map<T, Edge>> _adj_list;
 };
 
 #include "Graph.hpp"
