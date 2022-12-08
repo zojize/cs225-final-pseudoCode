@@ -44,6 +44,9 @@ void set_label(Algorithms::Labels<T>& labels, typename Graph<T>::Edge edge,
                Algorithms::TraversalLabel label);
 
 template <typename T>
+void bfs_walk(Graph<T> const& g, T const& v, Labels<T>& labels);
+
+template <typename T>
 void bfs_walk(Graph<T> const& g, Labels<T>&);
 
 /**
