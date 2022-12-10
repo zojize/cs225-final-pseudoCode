@@ -60,17 +60,18 @@ void bfs_walk(Graph<T> const& g, Labels<T>&);
 std::vector<Route> find_shortest_path_A_star(Graph<Airport>& g, Airport source,
                                              Airport destination);
 
-/**
- * Get the shortest path from source to destination using dijkstra
- *
- * @param g
- * @param source
- * @param destination
- * @returns vector of Route
- */
-std::vector<Route> find_shortest_path_dijkstra(Graph<Airport>& g,
-                                               Airport source,
-                                               Airport destination);
+template <typename T>
+struct Node {
+  T vertex;
+  double weight;
+  Node(T v, double w): vertex(v), weight(w){}
+  bool operator>(Node const& other) const {
+    return (weight > other.weight);
+  }
+};
+
+template <typename T>
+std::vector<T> find_shortest_path_dijkstra(Graph<T> &g, T source, T destination);
 }; // namespace Algorithms
 
 #include <Algorithms.hpp>
