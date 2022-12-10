@@ -49,7 +49,7 @@ void bfs_walk(Graph<T> const& g, T const& v, Labels<T>& labels);
 template <typename T>
 void bfs_walk(Graph<T> const& g, Labels<T>&);
 
-/**
+**
  * Get the shortest path from source to destination using A*
  *
  * @param g
@@ -57,8 +57,10 @@ void bfs_walk(Graph<T> const& g, Labels<T>&);
  * @param destination
  * @returns vector of Route
  */
-std::vector<Route> find_shortest_path_A_star(Graph<Airport>& g, Airport source,
-                                             Airport destination);
+template <typename T>
+std::vector<T> find_shortest_path_A_star(Graph<T> &g, T source, T destination);
+
+}; // namespace Algorithms
 
 template <typename T>
 struct Node {
