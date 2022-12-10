@@ -2,6 +2,7 @@
 #include <stdexcept>
 
 using namespace Algorithms;
+using namespace std;
 
 template <typename T>
 Algorithms::TraversalLabel Algorithms::get_label(Labels<T> const& labels,
@@ -141,4 +142,139 @@ void Algorithms::bfs_walk(Graph<T> const& g, Labels<T>& labels) {
     if (get_label(labels, v) == TraversalLabel::UNEXPLORED)
       bfs_walk_impl(g, v, labels);
   }
+}
+
+
+template <typename T>
+std::vector<T> Algorithms::find_shortest_path_dijkstra(Graph<T> &g, 
+                                                        T source, 
+                                                        T destination) {
+  vector<T> shortestPath;
+    
+  unordered_map<T, T> previousVertex;       // key: current airport         value: previous airport
+  unordered_map<T, double> weightMap;       // key: airport                 value: cumulative weight to current airport
+  unordered_map<T, bool> expandedVertices;  // key: airport                 value: whether this airport is expanded
+  priority_queue<Node<T>, vector<Node<T>>, greater<Node<T>>> minHeap; // T must be a comparable type
+
+  vector<T> vertices;
+  g.get_all_vertices(vertices);
+
+  // initialization
+  for (size_t i = 0; i < vertices.size(); i++) {
+      T currAirport = vertices[i];
+      expandedVertices[currAirport] = false;
+      weightMap[currAirport] = numeric_limits<double>::max();
+  }
+  minHeap.push(Node(source, 0.0));
+  weightMap[source] = 0.0;
+    
+  // traverse 
+  while (!minHeap.empty() && minHeap.top().vertex != destination) { 
+
+      // get current node from the priority queue
+      T currAirport = minHeap.top().vertex;
+      minHeap.pop();
+
+      // update neighbors' weight if necessary
+      vector<int> currAdjacent = g.get_adjacent(currAirport);
+      for (T adj : currAdjacent) {
+          if (!expandedVertices[adj]) {
+              T currentCumulativeWight = weightMap[currAirport] + g.get_edge_weight(currAirport, adj);
+              if (currentCumulativeWight < weightMap[adj]) {
+                  weightMap[adj] = currentCumulativeWight;
+                  previousVertex[adj] = currAirport;
+              } 
+              minHeap.push(Node(adj, currentCumulativeWight));
+          }
+      }
+      expandedVertices[currAirport] = true;
+  }
+
+  // destination not found
+  if (previousVertex.find(destination) == previousVertex.end()) {
+      return shortestPath;
+  } else {
+      // extract path from previous
+      T curr = destination;
+      shortestPath.push_back(destination);
+      while (previousVertex[curr] != source) {
+          shortestPath.push_back(previousVertex[curr]);
+          curr = previousVertex[curr];
+      }
+      shortestPath.push_back(source);
+  }
+
+  return shortestPath;
+}
+
+
+template <typename T>
+std::vector<T> Algorithms::find_shortest_path_A_star(Graph<T> &g, 
+                                                        T source, 
+                                                        T destination) {
+  vector<T> shortestPath;
+    
+  unordered_map<T, T> previousVertex;       // key: current airport         value: previous airport
+  unordered_map<T, double> weightMap;       // key: airport                 value: cumulative weight to current airport
+  unordered_map<T, bool> expandedVertices;  // key: airport                 value: whether this airport is expanded
+  priority_queue<Node<T>, vector<Node<T>>, greater<Node<T>>> minHeap; // T must be a comparable type
+
+  vector<T> vertices;
+  g.get_all_vertices(vertices);
+
+  // initialization
+  for (size_t i = 0; i < vertices.size(); i++) {
+      T currAirport = vertices[i];
+      expandedVertices[currAirport] = false;
+      weightMap[currAirport] = numeric_limits<double>::max();
+  }
+  minHeap.push(Node(source, 0.0));
+  weightMap[source] = 0.0;
+    
+  // traverse 
+  int expand = 0;
+  while (!minHeap.empty() && minHeap.top().vertex != destination) { 
+
+      // get current node from the priority queue
+      T currAirport = minHeap.top().vertex;
+      minHeap.pop();
+
+      // update neighbors' weight if necessary
+      vector<int> currAdjacent = g.get_adjacent(currAirport);
+      expand++;
+      for (T adj : currAdjacent) {
+          if (!expandedVertices[adj]) {
+              T currentCumulativeWight = weightMap[currAirport] + g.get_edge_weight(currAirport, adj);
+              T difference = abs(currAirport - adj);  // overwrite Airport operator- to do this
+              T weightSum = currentCumulativeWight + difference;
+              if (weightSum < weightMap[adj]) {
+                  weightMap[adj] = weightSum;
+                  previousVertex[adj] = currAirport;
+              } 
+              minHeap.push(Node(adj, weightSum));
+              if (adj == destination) break;
+          }
+      }
+      expandedVertices[currAirport] = true;
+  }
+
+  // destination not found
+  if (previousVertex.find(destination) == previousVertex.end()) {
+      return shortestPath;
+  } else {
+      // extract path from previous
+      T curr = destination;
+      shortestPath.push_back(destination);
+      while (previousVertex[curr] != source) {
+          shortestPath.push_back(previousVertex[curr]);
+          curr = previousVertex[curr];
+      }
+      shortestPath.push_back(source);
+  }
+  // print final weighted edges
+  for (auto i : weightMap) {
+    cout << "[ " << i.first << " weight: " << i.second << " ]" << endl;
+  }
+  cout << "total expand time: " << expand << endl;
+  return shortestPath;
 }
