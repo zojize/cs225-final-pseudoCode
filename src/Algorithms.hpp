@@ -107,7 +107,6 @@ void bfs_walk_impl(Graph<T> const& g, T const& v, Labels<T>& labels) {
   while (!q.empty()) {
     T v = q.front();
     q.pop();
-    std::cout << v << std::endl;
     for (T w : g.get_adjacent(v)) {
       if (get_label(labels, w) == TraversalLabel::UNEXPLORED) {
         set_label(labels, v, w, TraversalLabel::DISCOVERY);
