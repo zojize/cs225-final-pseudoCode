@@ -49,7 +49,7 @@ void bfs_walk(Graph<T> const& g, T const& v, Labels<T>& labels);
 template <typename T>
 void bfs_walk(Graph<T> const& g, Labels<T>&);
 
-**
+/**
  * Get the shortest path from source to destination using A*
  *
  * @param g
@@ -58,22 +58,19 @@ void bfs_walk(Graph<T> const& g, Labels<T>&);
  * @returns vector of Route
  */
 template <typename T>
-std::vector<T> find_shortest_path_A_star(Graph<T> &g, T source, T destination);
-
-}; // namespace Algorithms
+std::vector<T> find_shortest_path_A_star(Graph<T>& g, T source, T destination);
 
 template <typename T>
 struct Node {
   T vertex;
   double weight;
-  Node(T v, double w): vertex(v), weight(w){}
-  bool operator>(Node const& other) const {
-    return (weight > other.weight);
-  }
+  Node(T v, double w) : vertex(v), weight(w) {}
+  bool operator>(Node const& other) const { return (weight > other.weight); }
 };
 
 template <typename T>
-std::vector<T> find_shortest_path_dijkstra(Graph<T> &g, T source, T destination);
+std::vector<T> find_shortest_path_dijkstra(Graph<T>& g, T source,
+                                           T destination);
 }; // namespace Algorithms
 
 #include <Algorithms.hpp>
