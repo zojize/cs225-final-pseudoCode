@@ -4,6 +4,7 @@
 #define EPSILON 1e-6
 
 #include "Airport.h"
+#include "CsvReader.h"
 #include "Graph.h"
 #include "Route.h"
 
@@ -31,7 +32,7 @@ inline double geo_distance(Airport const& source, Airport const& destination) {
   double lon2 = destination.longitude * to_radian;
 
   return acos(sin(lat1) * sin(lat2) + cos(lat1) * cos(lat2) * cos(lon1 - lon2))
-         /* convert to physical may be unnecessary */
+         /* converting to physical unit may be unnecessary */
          * (180. / M_PI) * 60 * 1.852;
 }
 
@@ -44,6 +45,23 @@ inline void hash_combine(std::size_t& seed, T const& v) {
 template <typename T>
 inline bool approx_eq(T const& L, T const& R) {
   return std::abs(L - R) < T(EPSILON);
+}
+
+inline void load_data(std::vector<Airport>& airports,
+                      std::string const& airports_fname,
+                      std::vector<Route>& routes,
+                      std::string const& routes_fname) {
+  for (auto a : CsvReader(airports_fname)) {
+    airports.push_back(Airport{a});
+  }
+
+  for (auto r : CsvReader(routes_fname)) {
+    try {
+      routes.push_back(Route{r});
+    } catch (std::exception const& e) {
+      // invalid routes are ignored
+    }
+  }
 }
 
 inline void build_graph(Graph<Airport>& g, std::vector<Airport> const& airports,
@@ -62,8 +80,6 @@ inline void build_graph(Graph<Airport>& g, std::vector<Airport> const& airports,
     auto destination = airports[m_airports[r.destination_airport_id]];
     double distance = geo_distance(source, destination);
     if (source.id == 2965 && destination.id == 2990)
-      std::cout << "building : " << source << ", " << destination << ", "
-                << distance << std::endl;
     g.add_edge(source, destination, distance);
   }
 }

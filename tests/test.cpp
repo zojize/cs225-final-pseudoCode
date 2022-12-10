@@ -286,21 +286,11 @@ TEST_CASE("BFS: graph labeling simple", "[Graph][BFS]") {
 
 TEST_CASE("Graph: build graph", "[Graph][build_graph]") {
   Graph<Airport> g;
-  CsvReader reader_airports("../data/airports.csv");
-  CsvReader reader_routes("../data/routes.csv");
 
   vector<Airport> airports;
-  for (auto a : reader_airports) {
-    airports.push_back(Airport{a});
-  }
-
   vector<Route> routes;
-  for (auto r : reader_routes) {
-    try {
-      routes.push_back(Route{r});
-    } catch (std::exception const& e) {
-    }
-  }
+
+  load_data(airports, "../data/airports.csv", routes, "../data/routes.csv");
 
   build_graph(g, airports, routes);
 
