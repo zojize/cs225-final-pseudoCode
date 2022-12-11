@@ -148,3 +148,10 @@ inline void draw_route(SvgCanvas& canvas, Airport const& source,
         .quadratic_bezier(vr.x, vr.y, midr.x, midr.y, v_overr.x, v_overr.y);
   }
 }
+
+inline std::string lowercase(std::string& s) {
+  std::string s1(s);
+  for (char& c : s1)
+    c = tolower(c);
+  return s1;
+}

@@ -145,17 +145,19 @@ void Algorithms::bfs_walk(Graph<T> const& g, Labels<T>& labels) {
 }
 
 template <typename T>
-std::vector<T> Algorithms::find_shortest_path_dijkstra(Graph<T> &g, 
-                                                        T source, 
-                                                        T destination) {
+std::vector<T> Algorithms::find_shortest_path_dijkstra(Graph<T> const& g,
+                                                       T source,
+                                                       T destination) {
   vector<T> shortestPath;
 
   unordered_map<T, T>
       previousVertex; // key: current airport  value: previous airport
-  unordered_map<T, double> weightMap; // key: airport       
-                                      // value: cumulative weight to current airport
-  unordered_map<T, bool> expandedVertices; // key: airport 
-                                           // value: whether this airport is expanded
+  unordered_map<T, double>
+      weightMap; // key: airport
+                 // value: cumulative weight to current airport
+  unordered_map<T, bool>
+      expandedVertices; // key: airport
+                        // value: whether this airport is expanded
   priority_queue<Node<T>, vector<Node<T>>, greater<Node<T>>>
       minHeap; // T must be a comparable type
 
@@ -212,17 +214,18 @@ std::vector<T> Algorithms::find_shortest_path_dijkstra(Graph<T> &g,
 }
 
 template <typename T>
-std::vector<T> Algorithms::find_shortest_path_A_star(Graph<T> &g, 
-                                                        T source, 
-                                                        T destination) {
+std::vector<T> Algorithms::find_shortest_path_A_star(Graph<T> const& g, T source,
+                                                     T destination) {
   vector<T> shortestPath;
 
   unordered_map<T, T>
       previousVertex; // key: current airport  value: previous airport
-  unordered_map<T, double> weightMap; // key: airport       
-                                      // value: cumulative weight to current airport
-  unordered_map<T, bool> expandedVertices; // key: airport 
-                                           // value: whether this airport is expanded
+  unordered_map<T, double>
+      weightMap; // key: airport
+                 // value: cumulative weight to current airport
+  unordered_map<T, bool>
+      expandedVertices; // key: airport
+                        // value: whether this airport is expanded
   priority_queue<Node<T>, vector<Node<T>>, greater<Node<T>>>
       minHeap; // T must be a comparable type
 
@@ -249,9 +252,10 @@ std::vector<T> Algorithms::find_shortest_path_A_star(Graph<T> &g,
     vector<T> currAdjacent = g.get_adjacent(currAirport);
     for (T adj : currAdjacent) {
       if (!expandedVertices[adj]) {
-        double currentCumulativeWight = 
-              weightMap[currAirport] + g.get_edge_weight(currAirport, adj);
-        double difference = abs(currAirport - adj);  // overwrite Airport operator- to do this
+        double currentCumulativeWight =
+            weightMap[currAirport] + g.get_edge_weight(currAirport, adj);
+        double difference =
+            abs(currAirport - adj); // overwrite Airport operator- to do this
         double weightSum = currentCumulativeWight + difference;
         if (currentCumulativeWight < weightMap[adj]) {
           weightMap[adj] = currentCumulativeWight;

@@ -58,7 +58,7 @@ void bfs_walk(Graph<T> const& g, Labels<T>&);
  * @returns vector of Route
  */
 template <typename T>
-std::vector<T> find_shortest_path_A_star(Graph<T>& g, T source, T destination);
+std::vector<T> find_shortest_path_A_star(Graph<T> const& g, T source, T destination);
 
 template <typename T>
 struct Node {
@@ -69,7 +69,7 @@ struct Node {
 };
 
 template <typename T>
-std::vector<T> find_shortest_path_dijkstra(Graph<T>& g, T source,
+std::vector<T> find_shortest_path_dijkstra(Graph<T> const& g, T source,
                                            T destination);
 }; // namespace Algorithms
 
