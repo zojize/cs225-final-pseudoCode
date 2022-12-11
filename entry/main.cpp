@@ -170,6 +170,8 @@ int main(int argc, char *argv[]) {
     return 0;
   }
 
+  cout << "Generating svg..." << endl;
+
   cs225::PNG map;
   map.readFromFile(map_fname);
 
@@ -189,6 +191,10 @@ int main(int argc, char *argv[]) {
   for (size_t i = 0; i < search_result.size() - 1; i++) {
     draw_route(canvas, search_result[i], search_result[i]);
   }
+
+  canvas.write_to_file(outfile);
+
+  cout << "generated svg at " << outfile << endl;
 
   return 0;
 }
