@@ -358,3 +358,32 @@ TEST_CASE("Algorithm: Dijkstra find shortest path", "[Algorithms]""[Dijkstra]") 
   vector<int> correctPath6;
   REQUIRE(shortestPath6 == correctPath6);
 }
+
+
+TEST_CASE("Airport: Dijkstra find shortest path", "[Algorithms]""[Dijkstra]") {
+  Graph<Airport> g;
+  CsvReader reader_airports("../data/airports.csv");
+  CsvReader reader_routes("../data/routes.csv");
+
+  vector<Airport> airports;
+  for (auto a : reader_airports) {
+    airports.push_back(Airport{a});
+  }
+
+  vector<Route> routes;
+  for (auto r : reader_routes) {
+    try {
+      routes.push_back(Route{r});
+    } catch (std::exception const& e) {
+    }
+  }
+
+  build_graph(g, airports, routes);
+  vector<Airport> airport;
+  g.get_all_vertices(airport);
+  for (size_t i = 0; i < 1000; i++) {
+    vector<Airport> shortestPathD = find_shortest_path_dijkstra(g, airport[0], airports[i]);
+    vector<Airport> shortestPathA = find_shortest_path_A_star(g, airport[0], airports[i]);
+    REQUIRE(shortestPathD == shortestPathA);
+  }
+}
