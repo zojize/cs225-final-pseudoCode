@@ -174,11 +174,17 @@ std::vector<T> Algorithms::find_shortest_path_dijkstra(Graph<T> const& g,
   weightMap[source] = 0.0;
 
   // traverse
-  while (!minHeap.empty() && minHeap.top().vertex != destination) {
+  while (!minHeap.empty()) {
 
     // get current node from the priority queue
     T currAirport = minHeap.top().vertex;
     minHeap.pop();
+
+    // node is visited
+    if (expandedVertices[currAirport]) continue;
+
+    // find destination
+    if (currAirport == destination) break;
 
     // update neighbors' weight if necessary
     vector<T> currAdjacent = g.get_adjacent(currAirport);
@@ -187,13 +193,16 @@ std::vector<T> Algorithms::find_shortest_path_dijkstra(Graph<T> const& g,
         double currentCumulativeWight =
             weightMap[currAirport] + g.get_edge_weight(currAirport, adj);
         if (currentCumulativeWight < weightMap[adj]) {
+          
           weightMap[adj] = currentCumulativeWight;
           previousVertex[adj] = currAirport;
         }
         minHeap.push(Node(adj, currentCumulativeWight));
+        if (adj == destination) break;
       }
     }
     expandedVertices[currAirport] = true;
+    // cout << endl;
   }
 
   // destination not found
@@ -202,14 +211,13 @@ std::vector<T> Algorithms::find_shortest_path_dijkstra(Graph<T> const& g,
   } else {
     // extract path from previous
     T curr = destination;
-    shortestPath.push_back(destination);
-    while (previousVertex[curr] != source) {
-      shortestPath.push_back(previousVertex[curr]);
-      curr = previousVertex[curr];
+    shortestPath.insert(shortestPath.begin(), destination);
+    while (curr != source) {
+      shortestPath.insert(shortestPath.begin(), previousVertex[curr]);
+      curr = (previousVertex[curr]);
+      if (curr == source) break;
     }
-    shortestPath.push_back(source);
   }
-
   return shortestPath;
 }
 
