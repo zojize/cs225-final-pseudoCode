@@ -307,7 +307,8 @@ TEST_CASE("Graph: build graph", "[Graph][build_graph]") {
   }
 }
 
-TEST_CASE("Algorithm: Dijkstra find shortest path", "[Algorithms]""[Dijkstra]") {
+TEST_CASE("Algorithm: Dijkstra find shortest path", "[Algorithms]"
+                                                    "[Dijkstra]") {
   Graph<int> g{};
   for (size_t i = 0; i < 10; i++) {
     g.add_vertex(i);
@@ -337,7 +338,7 @@ TEST_CASE("Algorithm: Dijkstra find shortest path", "[Algorithms]""[Dijkstra]") 
   vector<int> shortestPath = find_shortest_path_dijkstra(g, 1, 9);
   vector<int> correctPath = {9, 6, 7, 8, 0, 1};
   REQUIRE(shortestPath == correctPath);
-  
+
   vector<int> shortestPath2 = find_shortest_path_dijkstra(g, 1, 4);
   vector<int> correctPath2 = {4, 3, 2, 1};
   REQUIRE(shortestPath2 == correctPath2);
@@ -359,31 +360,21 @@ TEST_CASE("Algorithm: Dijkstra find shortest path", "[Algorithms]""[Dijkstra]") 
   REQUIRE(shortestPath6 == correctPath6);
 }
 
-
-TEST_CASE("Airport: Dijkstra find shortest path", "[Algorithms]""[Dijkstra]") {
-  Graph<Airport> g;
-  CsvReader reader_airports("../data/airports.csv");
-  CsvReader reader_routes("../data/routes.csv");
-
+TEST_CASE("Airport: Dijkstra find shortest path", "[Algorithms]"
+                                                  "[Dijkstra]") {
   vector<Airport> airports;
-  for (auto a : reader_airports) {
-    airports.push_back(Airport{a});
-  }
-
   vector<Route> routes;
-  for (auto r : reader_routes) {
-    try {
-      routes.push_back(Route{r});
-    } catch (std::exception const& e) {
-    }
-  }
+  load_data(airports, "../data/airports.csv", routes, "../data/routes.csv");
 
+  Graph<Airport> g;
   build_graph(g, airports, routes);
   vector<Airport> airport;
   g.get_all_vertices(airport);
   for (size_t i = 0; i < 1000; i++) {
-    vector<Airport> shortestPathD = find_shortest_path_dijkstra(g, airport[0], airports[i]);
-    vector<Airport> shortestPathA = find_shortest_path_A_star(g, airport[0], airports[i]);
+    vector<Airport> shortestPathD =
+        find_shortest_path_dijkstra(g, airport[0], airports[i]);
+    vector<Airport> shortestPathA =
+        find_shortest_path_A_star(g, airport[0], airports[i]);
     REQUIRE(shortestPathD == shortestPathA);
   }
 }
