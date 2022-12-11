@@ -149,8 +149,8 @@ int main(int argc, char *argv[]) {
   build_graph(g, airports, routes);
   cout << "Finished building Graph<Airport>" << endl;
 
-  cout << "Running " << algorithm << " from " << source_airport << " to "
-       << dest_airport << "..." << endl;
+  cout << "Running " << algorithm << " from " << source_airport.name << " to "
+       << dest_airport.name << "..." << endl;
   vector<Airport> search_result;
   search_result = algorithm == "dijkstra"
                       ? Algorithms::find_shortest_path_dijkstra(
@@ -180,8 +180,8 @@ int main(int argc, char *argv[]) {
   SvgCanvas canvas(map.width(), map.height());
   canvas.image(map_fname);
 
-  canvas.attrs["fill"] = "rgb(255, 255, 255)";
-  canvas.attrs["stroke"] = "rgb(0, 0, 0)";
+  canvas.attrs["fill"] = "#ffffff";
+  canvas.attrs["stroke"] = "#000000";
   for (size_t i = 0; i < search_result.size(); i++) {
     Airport const& a = search_result[i];
     Vector2d<double> p = lat_lon_to_offsets(a.latitude, a.longitude,
@@ -189,10 +189,24 @@ int main(int argc, char *argv[]) {
     canvas.circle(p.x, p.y, 3);
   }
 
-  canvas.attrs["stroke"] = "rgba(255, 0, 0, 0.3)";
+  canvas.attrs["stroke"] = "#ff0000";
+  canvas.attrs["fill"] = "none";
   for (size_t i = 0; i < search_result.size() - 1; i++) {
-    draw_route(canvas, search_result[i], search_result[i]);
+    draw_route(canvas, search_result[i], search_result[i + 1]);
   }
+
+  canvas.attrs["fill"] = "#ffffff";
+  canvas.attrs["stroke"] = "#000000";
+  canvas.attrs["font-family"] = "Arial, Helvetica, sans-serif";
+  canvas.attrs["font-weight"] = "bold";
+  for (size_t i = 0; i < search_result.size(); i++) {
+    Airport const& a = search_result[i];
+    Vector2d<double> p = lat_lon_to_offsets(a.latitude, a.longitude,
+                                            canvas.width, canvas.height);
+    canvas.text(p.x, p.y, a.iata == "\\N" ? a.name : a.iata);
+  }
+  canvas.attrs.erase("font-family");
+  canvas.attrs.erase("font-weight");
 
   canvas.write_to_file(outfile);
 
