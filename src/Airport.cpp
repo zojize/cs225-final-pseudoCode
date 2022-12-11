@@ -15,6 +15,12 @@ bool Airport::operator==(Airport const& other) const {
           longitude == other.longitude);
 }
 
+bool Airport::operator!=(Airport const& other) const {
+  return this != &other ||
+         (id != other.id && name != other.name && latitude != other.latitude &&
+          longitude != other.longitude);
+}
+
 std::ostream& operator<<(std::ostream& os, Airport const& a) {
   return os << "Airport { " << a.id << ", " << a.name << ", " << a.latitude
             << ", " << a.longitude << " }";
@@ -22,6 +28,10 @@ std::ostream& operator<<(std::ostream& os, Airport const& a) {
 
 bool Airport::operator<(Airport const& other) const {
   return (latitude < other.latitude && longitude < other.longitude);
+}
+
+double Airport::operator-(Airport const& other) const {
+  return geo_distance(*this, other);
 }
 
 size_t std::hash<Airport>::operator()(Airport const& a) const {
