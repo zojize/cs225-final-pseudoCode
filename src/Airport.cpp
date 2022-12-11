@@ -1,13 +1,15 @@
 #include "./Airport.h"
 #include "utils.h"
 
-Airport::Airport(unsigned int id, std::string name, double latitude,
-                 double longitude)
-    : id(id), name(name), latitude(latitude), longitude(longitude) {}
+Airport::Airport(unsigned int id, std::string const& name,
+                 std::string const& iata, std::string const& icao,
+                 double latitude, double longitude)
+    : id(id), name(name), iata(iata), icao(icao), latitude(latitude),
+      longitude(longitude) {}
 
 Airport::Airport(std::vector<std::string> const& entries)
-    : Airport(std::stoi(entries[0]), entries[1], std::stod(entries[6]),
-              std::stod(entries[7])) {}
+    : Airport(std::stoi(entries[0]), entries[1], entries[4], entries[5],
+              std::stod(entries[6]), std::stod(entries[7])) {}
 
 bool Airport::operator==(Airport const& other) const {
   return this == &other ||
@@ -22,8 +24,8 @@ bool Airport::operator!=(Airport const& other) const {
 }
 
 std::ostream& operator<<(std::ostream& os, Airport const& a) {
-  return os << "Airport { " << a.id << ", " << a.name << ", " << a.latitude
-            << ", " << a.longitude << " }";
+  return os << "Airport { " << a.id << ", " << a.name << ", " << a.iata << ", "
+            << a.icao << " }";
 }
 
 bool Airport::operator<(Airport const& other) const {
