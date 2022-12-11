@@ -149,7 +149,8 @@ int main(int argc, char *argv[]) {
   build_graph(g, airports, routes);
   cout << "Finished building Graph<Airport>" << endl;
 
-  cout << "Running " << algorithm << "..." << endl;
+  cout << "Running " << algorithm << " from " << source_airport << " to "
+       << dest_airport << "..." << endl;
   vector<Airport> search_result;
   search_result = algorithm == "dijkstra"
                       ? Algorithms::find_shortest_path_dijkstra(
@@ -162,6 +163,7 @@ int main(int argc, char *argv[]) {
     if (search_result.size() == 0) {
       cout << "No viable path found for " << source << " and " << dest << "."
            << endl;
+      return 0;
     }
 
     for (size_t i = 0; i < search_result.size() - 1; i++)
