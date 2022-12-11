@@ -66,7 +66,7 @@ public:
     return *this;
   }
 
-  void writeToFile(std::string const& fname) {
+  void write_to_file(std::string const& fname) {
     std::ofstream f(fname);
     f << "<svg width=\"" << width << "\" height=\"" << height
       << "\" xmlns=\"http://www.w3.org/2000/svg\">\n"
