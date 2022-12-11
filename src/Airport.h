@@ -6,11 +6,14 @@
 
 struct Airport {
   Airport() = default;
-  Airport(unsigned int id, std::string name, double latitude, double longitude);
+  Airport(unsigned int id, std::string const& name, std::string const& iata,
+          std::string const& icao, double latitude, double longitude);
   Airport(std::vector<std::string> const& entries);
 
   unsigned int id;
   std::string name;
+  std::string iata;
+  std::string icao;
   double latitude;
   double longitude;
 
