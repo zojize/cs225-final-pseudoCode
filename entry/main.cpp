@@ -159,13 +159,13 @@ int main(int argc, char *argv[]) {
                                                               dest_airport);
   cout << "Finished running " << algorithm << endl;
 
-  if (mode == "text") {
-    if (search_result.size() == 0) {
-      cout << "No viable path found for " << source << " and " << dest << "."
-           << endl;
-      return 0;
-    }
+  if (search_result.size() == 0) {
+    cout << "No viable path found for " << source << " and " << dest << "."
+         << endl;
+    return 0;
+  }
 
+  if (mode == "text") {
     for (size_t i = 0; i < search_result.size() - 1; i++)
       cout << search_result[i].name << " ->" << endl;
     cout << search_result.back().name << endl;
