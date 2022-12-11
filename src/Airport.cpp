@@ -25,10 +25,11 @@ bool Airport::operator<(Airport const& other) const {
 }
 
 size_t std::hash<Airport>::operator()(Airport const& a) const {
-  size_t seed = 0;
-  hash_combine(seed, a.id);
-  hash_combine(seed, a.name);
-  hash_combine(seed, a.latitude);
-  hash_combine(seed, a.longitude);
-  return seed;
+  // i feel stupid doing this...
+  // size_t seed = 0;
+  // hash_combine(seed, a.id);
+  // hash_combine(seed, a.name);
+  // hash_combine(seed, a.latitude);
+  // hash_combine(seed, a.longitude);
+  return static_cast<size_t>(a.id);
 }

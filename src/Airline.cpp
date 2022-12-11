@@ -15,8 +15,5 @@ std::ostream& operator<<(std::ostream& os, const Airline& a) {
 }
 
 size_t std::hash<Airline>::operator()(const Airline& a) const {
-  size_t seed = 0;
-  hash_combine(seed, a.id);
-  hash_combine(seed, a.name);
-  return seed;
+  return static_cast<size_t>(a.id);
 }
