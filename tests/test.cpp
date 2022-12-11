@@ -315,4 +315,4 @@ TEST_CASE("Graph: build graph", "[Graph][build_graph]") {
     double distance = geo_distance(source, destination);
     REQUIRE(approx_eq(g.get_edge_weight(source, destination), distance));
   }
-}
+} 
