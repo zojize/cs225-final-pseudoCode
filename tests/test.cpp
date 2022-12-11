@@ -307,59 +307,6 @@ TEST_CASE("Graph: build graph", "[Graph][build_graph]") {
   }
 }
 
-TEST_CASE("Algorithm: Dijkstra find shortest path", "[Algorithms]"
-                                                    "[Dijkstra]") {
-  Graph<int> g{};
-  for (size_t i = 0; i < 10; i++) {
-    g.add_vertex(i);
-  }
-  g.add_edge(1, 0, 1);
-  g.add_edge(1, 3, 8);
-  g.add_edge(1, 2, 2);
-  g.add_edge(1, 5, 3);
-  g.add_edge(1, 7, 100);
-
-  g.add_edge(0, 9, 100);
-  g.add_edge(0, 8, 1);
-  g.add_edge(8, 7, 1);
-
-  g.add_edge(2, 3, 4);
-  g.add_edge(3, 4, 2);
-  g.add_edge(5, 6, 6);
-  g.add_edge(6, 7, 1);
-  g.add_edge(6, 9, 4);
-  g.add_edge(7, 1, 5);
-  g.add_edge(7, 6, 1);
-  g.add_edge(8, 9, 100);
-  g.add_edge(9, 8, 3);
-
-  int start = 1;
-  int end = 9;
-  vector<int> shortestPath = find_shortest_path_dijkstra(g, 1, 9);
-  vector<int> correctPath = {9, 6, 7, 8, 0, 1};
-  REQUIRE(shortestPath == correctPath);
-
-  vector<int> shortestPath2 = find_shortest_path_dijkstra(g, 1, 4);
-  vector<int> correctPath2 = {4, 3, 2, 1};
-  REQUIRE(shortestPath2 == correctPath2);
-
-  vector<int> shortestPath3 = find_shortest_path_dijkstra(g, 2, 4);
-  vector<int> correctPath3 = {4, 3, 2};
-  REQUIRE(shortestPath3 == correctPath3);
-
-  vector<int> shortestPath4 = find_shortest_path_dijkstra(g, 0, 5);
-  vector<int> correctPath4 = {5, 1, 7, 8, 0};
-  REQUIRE(shortestPath4 == correctPath4);
-
-  vector<int> shortestPath5 = find_shortest_path_dijkstra(g, 1, 1);
-  vector<int> correctPath5;
-  REQUIRE(shortestPath5 == correctPath5);
-
-  vector<int> shortestPath6 = find_shortest_path_dijkstra(g, 4, 3);
-  vector<int> correctPath6;
-  REQUIRE(shortestPath6 == correctPath6);
-}
-
 TEST_CASE("Airport: Dijkstra find shortest path", "[Algorithms]"
                                                   "[Dijkstra]") {
   vector<Airport> airports;
