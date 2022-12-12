@@ -317,7 +317,7 @@ TEST_CASE("Airport: Dijkstra find shortest path", "[Algorithms]"
   build_graph(g, airports, routes);
   vector<Airport> airport;
   g.get_all_vertices(airport);
-  for (size_t i = 0; i < 1000; i++) {
+  for (size_t i = 0; i < 100; i++) {
     vector<Airport> shortestPathD =
         find_shortest_path_dijkstra(g, airport[0], airports[i]);
     vector<Airport> shortestPathA =
