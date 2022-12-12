@@ -20,6 +20,16 @@ bool Edge<Graph>::operator==(Edge<Graph> const& other) const {
 }
 
 template <typename Graph>
+bool Edge<Graph>::operator<(Edge<Graph> const& other) const {
+  return weight < other.weight;
+}
+
+template <typename Graph>
+bool Edge<Graph>::operator>(Edge<Graph> const& other) const {
+  return weight > other.weight;
+}
+
+template <typename Graph>
 std::ostream& operator<<(std::ostream& os, Edge<Graph> const& e) {
   return os << "Edge { " << e.source << " [" << e.weight << "]=> "
             << e.destination << " }";
@@ -57,8 +67,6 @@ void Graph<T>::get_all_vertices(std::vector<T>& v) const {
     v.push_back(p.first);
 }
 
-// static Airport a2965;
-// static Airport a2990;
 
 template <typename T>
 void Graph<T>::add_edge(T const& source, T const& destination, double weight) {
@@ -74,6 +82,13 @@ template <typename T>
 void Graph<T>::remove_edge(T const& source, T const& destination) {
   if (contains_edge(source, destination))
     _adj_list[source].erase(destination);
+}
+
+template <typename T>
+Edge<Graph<T>> const& Graph<T>::get_edge(T const& source, T const& destination) const {
+  if (contains_edge(source, destination))
+    return _adj_list.at(source).at(destination);
+  throw std::range_error("non-existent edge");
 }
 
 template <typename T>
@@ -121,6 +136,11 @@ std::vector<T> Graph<T>::get_adjacent(T const& v) const {
     adj.push_back(p.first);
 
   return adj;
+}
+
+template <typename T>
+size_t Graph<T>::size() const {
+  return _adj_list.size();
 }
 
 /**

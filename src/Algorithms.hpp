@@ -1,5 +1,7 @@
+#include <limits>
 #include <queue>
 #include <stdexcept>
+#include <unordered_set>
 
 using namespace Algorithms;
 using namespace std;
@@ -39,8 +41,6 @@ void Algorithms::set_label(Algorithms::Labels<T>& labels, T source,
                            T destination, Algorithms::TraversalLabel label) {
   if (labels.second.find(source) == labels.second.end())
     labels.second.insert({source, {}});
-  // std::cout << "set_label(" << source << ", " << destination << ", " << label
-  // << ")" << std::endl;
   labels.second[source][destination] = label;
 }
 
@@ -181,10 +181,12 @@ std::vector<T> Algorithms::find_shortest_path_dijkstra(Graph<T> const& g,
     minHeap.pop();
 
     // node is visited
-    if (expandedVertices[currAirport]) continue;
+    if (expandedVertices[currAirport])
+      continue;
 
     // find destination
-    if (currAirport == destination) break;
+    if (currAirport == destination)
+      break;
 
     // update neighbors' weight if necessary
     vector<T> currAdjacent = g.get_adjacent(currAirport);
@@ -193,12 +195,13 @@ std::vector<T> Algorithms::find_shortest_path_dijkstra(Graph<T> const& g,
         double currentCumulativeWight =
             weightMap[currAirport] + g.get_edge_weight(currAirport, adj);
         if (currentCumulativeWight < weightMap[adj]) {
-          
+
           weightMap[adj] = currentCumulativeWight;
           previousVertex[adj] = currAirport;
         }
         minHeap.push(Node(adj, currentCumulativeWight));
-        if (adj == destination) break;
+        if (adj == destination)
+          break;
       }
     }
     expandedVertices[currAirport] = true;
@@ -215,15 +218,16 @@ std::vector<T> Algorithms::find_shortest_path_dijkstra(Graph<T> const& g,
     while (curr != source) {
       shortestPath.insert(shortestPath.begin(), previousVertex[curr]);
       curr = (previousVertex[curr]);
-      if (curr == source) break;
+      if (curr == source)
+        break;
     }
   }
   return shortestPath;
 }
 
 template <typename T>
-std::vector<T> Algorithms::find_shortest_path_A_star(Graph<T> const& g, T source,
-                                                     T destination) {
+std::vector<T> Algorithms::find_shortest_path_A_star(Graph<T> const& g,
+                                                     T source, T destination) {
   vector<T> shortestPath;
 
   unordered_map<T, T>
@@ -257,10 +261,12 @@ std::vector<T> Algorithms::find_shortest_path_A_star(Graph<T> const& g, T source
     minHeap.pop();
 
     // node is visited
-    if (expandedVertices[currAirport]) continue;
+    if (expandedVertices[currAirport])
+      continue;
 
     // find destination
-    if (currAirport == destination) break;
+    if (currAirport == destination)
+      break;
 
     // update neighbors' weight if necessary
     vector<T> currAdjacent = g.get_adjacent(currAirport);
@@ -291,8 +297,47 @@ std::vector<T> Algorithms::find_shortest_path_A_star(Graph<T> const& g, T source
     while (curr != source) {
       shortestPath.insert(shortestPath.begin(), previousVertex[curr]);
       curr = (previousVertex[curr]);
-      if (curr == source) break;
+      if (curr == source)
+        break;
     }
   }
   return shortestPath;
+}
+
+template <typename T>
+void Algorithms::prims(Graph<T> const& g, T const& start, Graph<T>& out) {
+  unordered_map<T, double> d;
+  unordered_map<T, T> p;
+
+  vector<T> vertices;
+  g.get_all_vertices(vertices);
+  for (T const& v : vertices) {
+    d[v] = numeric_limits<double>::max();
+  }
+
+  priority_queue min_heap(
+      vertices.begin(), vertices.end(),
+      [d](T const& l, T const& r) { return d.at(l) > d.at(r); });
+  d[start] = 0;
+
+  double weight;
+  for (size_t i = 0; i < vertices.size(); i++) {
+    if (min_heap.empty())
+      break;
+    T m = min_heap.top();
+    min_heap.pop();
+
+    out.add_vertex(m);
+    for (T const& v : g.get_adjacent(m)) {
+      if (out.contains_vertex(v))
+        continue;
+      if ((weight = g.get_edge_weight(m, v)) < d[v]) {
+        d[v] = weight;
+        p[v] = m;
+      }
+    }
+  }
+
+  for (auto t : p)
+    out.add_edge(t.second, t.first, d[t.first]);
 }
