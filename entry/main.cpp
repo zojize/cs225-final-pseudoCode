@@ -13,11 +13,16 @@ using namespace std;
 
 // clang-format off
 static string usage_prompt = \
-  "Finds the shortest path between airports using either A* or Dijkstra's algorithm.\n\n"
-  "USAGE: ./main [OPTIONS] SOURCE_AIRPORT DESTINATION_AIRPORT\n\n"
+  "Finds the shortest path between airports using either A* or Dijkstra's algorithm.\n"
+  "\n"
+  "USAGE:\n"
+  "                        ./main [OPTIONS] SOURCE_AIRPORT DESTINATION_AIRPORT\n"
+  "                        ./main prims [SOURCE_AIRPORT] [OPTIONS]\n"
+  "\n"
   "POSITIONAL ARGUMENTS:\n"
   "    SOURCE_AIRPORT       Airport code of the source airport.\n"
-  "    DESTINATION_AIRPORT  Airport code of the destination airport.\n\n"
+  "    DESTINATION_AIRPORT  Airport code of the destination airport.\n"
+  "\n"
   "OPTIONS:\n"
   "    -h, --help\n"
   "                         Show this message and exit.\n"
@@ -29,13 +34,17 @@ static string usage_prompt = \
   "                         Select the algorithm to use for pathfinding. Valid options\n"
   "                         are \"A*\" for A* search and \"dijkstra\" for Dijkstra's.\n"
   "    -o, --out [=output.svg]\n"
-  "                         Name for the output svg."
+  "                         Name for the output svg.\n"
   "    --routes [=../data/routes.csv]\n"
-  "                         Dataset csv filename for routes."
+  "                         Dataset csv filename for routes.\n"
   "    --airports [=../data/airports.csv]\n"
-  "                         Dataset csv filename for airports."
+  "                         Dataset csv filename for airports.\n"
   "    --map [=../data/map.png]\n"
-  "                         World map image file, has to be png."
+  "                         World map image file, has to be png.\n"
+  "\n"
+  "SUBCOMMANDS:\n"
+  "    prims [SOURCE_AIRPORT=LAX]\n"
+  "                         Outputs a svg image for the result of running prims algorithm.\n"
   ;
 // clang-format on
 
@@ -45,6 +54,8 @@ static string outfile = "output.svg";
 static string routes_fname = "../data/routes.csv";
 static string airports_fname = "../data/airports.csv";
 static string map_fname = "../data/map.png";
+static string source = "";
+static string dest = "";
 
 void process_args(int argc, char **argv) {
   char const *const short_opts = "m:a:o:h";
@@ -107,15 +118,21 @@ int main(int argc, char *argv[]) {
     return 0;
   }
 
-  if (argc - optind < 2) {
+  bool prims = argc - optind >= 1 && lowercase(string(argv[optind])) == "prims";
+
+  if (!prims && argc - optind < 2) {
     cerr << "Must provide both SOURCE_AIRPORT and DESTINATION_AIRPORT.";
     return 1;
   }
-
-  string source = argv[optind];
+  if (prims && argc - optind >= 2)
+    source = argv[optind + 1];
+  else
+    source = "lax";
   source = lowercase(source);
-  string dest = argv[optind + 1];
-  dest = lowercase(dest);
+  if (!prims) {
+    dest = argv[optind + 1];
+    dest = lowercase(dest);
+  }
 
   vector<Airport> airports;
   vector<Route> routes;
@@ -136,7 +153,7 @@ int main(int argc, char *argv[]) {
     cerr << "SOURCE_AIRPORT " << source << " not found." << endl;
     return 1;
   }
-  if (m_airports.find(dest) == m_airports.end()) {
+  if (!prims && m_airports.find(dest) == m_airports.end()) {
     cerr << "DESTINATION_AIRPORT " << dest << " not found." << endl;
     return 1;
   }
@@ -148,6 +165,43 @@ int main(int argc, char *argv[]) {
   cout << "Building Graph<Airport>..." << endl;
   build_graph(g, airports, routes);
   cout << "Finished building Graph<Airport>" << endl;
+
+  if (prims) {
+    Graph<Airport> result;
+    Algorithms::prims(g, source_airport, result);
+
+    vector<Airport> vertices;
+    result.get_all_vertices(vertices);
+    vector<typename Graph<Airport>::Edge> edges;
+    result.get_all_edges(edges);
+
+    cs225::PNG map;
+    map.readFromFile(map_fname);
+
+    SvgCanvas canvas(map.width(), map.height());
+    canvas.image(map_fname);
+
+    canvas.attrs["fill"] = "#ffffff";
+    canvas.attrs["stroke"] = "#000000";
+    for (size_t i = 0; i < vertices.size(); i++) {
+      Airport const& a = vertices[i];
+      Vector2d<double> p = lat_lon_to_offsets(a.latitude, a.longitude,
+                                              canvas.width, canvas.height);
+      canvas.circle(p.x, p.y, 3);
+    }
+
+    canvas.attrs["stroke"] = "#ff0000";
+    canvas.attrs["fill"] = "none";
+    for (size_t i = 0; i < edges.size(); i++) {
+      draw_route(canvas, edges[i].source, edges[i].destination);
+    }
+
+    canvas.write_to_file(outfile);
+
+    cout << "generated svg at " << outfile << endl;
+
+    return 0;
+  }
 
   cout << "Running " << algorithm << " from " << source_airport.name << " to "
        << dest_airport.name << "..." << endl;

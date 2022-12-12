@@ -305,7 +305,7 @@ std::vector<T> Algorithms::find_shortest_path_A_star(Graph<T> const& g,
 }
 
 template <typename T>
-void prims(Graph<T> const& g, T start, Graph<T>& out) {
+void Algorithms::prims(Graph<T> const& g, T const& start, Graph<T>& out) {
   unordered_map<T, double> d;
   unordered_map<T, T> p;
 
@@ -340,6 +340,4 @@ void prims(Graph<T> const& g, T start, Graph<T>& out) {
 
   for (auto t : p)
     out.add_edge(t.second, t.first, d[t.first]);
-
-  return out;
 }

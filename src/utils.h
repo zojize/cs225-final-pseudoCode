@@ -149,7 +149,7 @@ inline void draw_route(SvgCanvas& canvas, Airport const& source,
   }
 }
 
-inline std::string lowercase(std::string& s) {
+inline std::string lowercase(std::string const& s) {
   std::string s1(s);
   for (char& c : s1)
     c = tolower(c);

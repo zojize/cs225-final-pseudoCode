@@ -74,7 +74,7 @@ std::vector<T> find_shortest_path_dijkstra(Graph<T> const& g, T source,
                                            T destination);
 
 template <typename T>
-void prims(Graph<T> const& g, T start, Graph<T>& out);
+void prims(Graph<T> const& g, T const& start, Graph<T>& out);
 
 }; // namespace Algorithms
 
