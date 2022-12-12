@@ -17,6 +17,8 @@ struct Edge {
   double weight;
 
   bool operator==(Edge<Graph> const& other) const;
+  bool operator<(Edge<Graph> const& other) const;
+  bool operator>(Edge<Graph> const& other) const;
 };
 
 template <typename Graph>
@@ -68,6 +70,14 @@ public:
   void remove_edge(T const& source, T const& destination);
 
   /**
+   * Gets an edge of the graph
+   *
+   * @param source
+   * @param destination
+   */
+  Edge const& get_edge(T const& source, T const& destination) const;
+
+  /**
    * get all edges
    */
   void get_all_edges(std::vector<Edge>&) const;
@@ -108,6 +118,11 @@ public:
    * @throws std::range_error when the vertex don't exist
    */
   std::vector<T> get_adjacent(T const& v) const;
+
+  /**
+   * @return number of vertices in the graph
+   */
+  size_t size() const;
 
   /**
    * performs a bfs walk to the graph
