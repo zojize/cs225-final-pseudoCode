@@ -2,8 +2,7 @@
 
 ### Team member: Boyuan Zheng, Jeff Zou, Kaiwen Ren, Lingxiang Cai
 
-![Picture][cs225-final-pseudoCode/finalPic.png "pic"]
-![preview][/ "finalPic"]
+![preview](https://raw.githubusercontent.com/zojize/cs225-final-pseudoCode/main/finalPic.png "finalPic")
 
 ## Project Summary
 
