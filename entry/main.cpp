@@ -1,13 +1,15 @@
 #include "Airport.h"
 #include "Algorithms.h"
 #include "Canvas.h"
+#include "DisjointSets.h"
 #include "SvgCanvas.h"
 #include "Vector2d.h"
-#include "cs225/PNG.h"
+#include "cs225/RGB_HSL.h"
 #include "utils.h"
 
 #include "getopt.h"
 #include <iostream>
+#include <unordered_map>
 
 using namespace std;
 
@@ -167,9 +169,13 @@ int main(int argc, char *argv[]) {
   cout << "Finished building Graph<Airport>" << endl;
 
   if (prims) {
+
+    cout << "Running Prim's algorithm..." << endl;
     Graph<Airport> result;
     Algorithms::prims(g, source_airport, result);
+    cout << "Finished running Prim's algorithm" << endl;
 
+    cout << "Generating svg..." << endl;
     vector<Airport> vertices;
     result.get_all_vertices(vertices);
     vector<typename Graph<Airport>::Edge> edges;
@@ -181,18 +187,46 @@ int main(int argc, char *argv[]) {
     SvgCanvas canvas(map.width(), map.height());
     canvas.image(map_fname);
 
+    DisjointSets dset;
+    dset.add_elements(airports.size());
+    for (size_t i = 0; i < edges.size(); i++) {
+      dset.set_union(m_airports[to_string(edges[i].source.id)],
+                     m_airports[to_string(edges[i].destination.id)]);
+    }
+    int connected_components = dset.size_sets(true);
+    // cout << "comps: " << connected_components << endl;
+
+    cs225::hslaColor hsl{0, 0.8, 0.6, 1};
+    string *colors = new string[connected_components];
+
+    double step = 360 / connected_components;
+    for (int i = 0; i < connected_components; i++) {
+      cs225::rgbaColor rgb = cs225::hsl2rgb(hsl);
+      colors[i] = colors[i] + "rgba(" + to_string(rgb.r) + "," +
+                  to_string(rgb.g) + "," + to_string(rgb.b) + ")";
+      hsl.h += step;
+    }
+
     canvas.attrs["fill"] = "#ffffff";
     canvas.attrs["stroke"] = "#000000";
     for (size_t i = 0; i < vertices.size(); i++) {
+      if (dset.size(m_airports[to_string(vertices[i].id)]) < 2)
+        continue;
+
       Airport const& a = vertices[i];
       Vector2d<double> p = lat_lon_to_offsets(a.latitude, a.longitude,
                                               canvas.width, canvas.height);
       canvas.circle(p.x, p.y, 3);
     }
 
-    canvas.attrs["stroke"] = "#ff0000";
     canvas.attrs["fill"] = "none";
+    unordered_map<int, size_t> color_indices;
+    size_t color_index = 0;
     for (size_t i = 0; i < edges.size(); i++) {
+      size_t key = dset.find(m_airports[to_string(edges[i].source.id)]);
+      if (color_indices.find(key) == color_indices.end())
+        color_indices[key] = color_index++;
+      canvas.attrs["stroke"] = colors[color_indices[key]];
       draw_route(canvas, edges[i].source, edges[i].destination);
     }
 
@@ -200,6 +234,7 @@ int main(int argc, char *argv[]) {
 
     cout << "generated svg at " << outfile << endl;
 
+    delete[] colors;
     return 0;
   }
 
