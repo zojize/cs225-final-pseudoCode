@@ -325,3 +325,72 @@ TEST_CASE("Airport: Dijkstra find shortest path", "[Algorithms]"
     REQUIRE(shortestPathD == shortestPathA);
   }
 }
+
+TEST_CASE("Dijkstra: basic", "[Dijkstra]") {
+  Graph<int> g{};
+
+  for (int i = 0; i < 6; i++) {
+    g.add_vertex(i);
+  }
+  g.add_edge(0, 1, 9);
+  g.add_edge(0, 2, 1);
+  g.add_edge(2, 3, 2);
+  g.add_edge(1, 3, 7);
+  g.add_edge(2, 4, 6);
+  g.add_edge(3, 5, 5);
+  g.add_edge(1, 4, 3);
+  g.add_edge(4, 5, 8);
+  
+  vector<int> djI = find_shortest_path_dijkstra(g, 0, 5);
+  vector<int> correctVII{0, 2, 3, 5}; 
+  REQUIRE(djI == correctVII);
+
+}
+
+TEST_CASE("Dijkstra: basic2", "[Dijkstra]") {
+  Graph<int> g{};
+  for (int i = 0; i < 3; i++) {
+    g.add_vertex(i);
+  }
+  g.add_edge(0, 1, 2);
+  g.add_edge(0, 2, 4);
+  g.add_edge(1, 2, 1);
+  
+  vector<int> djII = find_shortest_path_dijkstra(g, 0, 2);
+  vector<int> correctVII{0, 2}; 
+  REQUIRE(djII == correctVII);
+}
+
+TEST_CASE("A star: basic", "[Astar]") {
+  Graph<int> g{};
+  for (int i = 0; i < 6; i++) {
+    g.add_vertex(i);
+  }
+  g.add_edge(0, 1, 9);
+  g.add_edge(0, 2, 1);
+  g.add_edge(2, 3, 2);
+  g.add_edge(1, 3, 7);
+  g.add_edge(2, 4, 6);
+  g.add_edge(3, 5, 5);
+  g.add_edge(1, 4, 3);
+  g.add_edge(4, 5, 8);
+  
+  vector<int> asV = find_shortest_path_dijkstra(g, 0, 5);
+  vector<int> correctX{0, 2, 3, 5}; 
+  REQUIRE(asV == correctX);
+}
+
+TEST_CASE("A star: basic2", "[Astar]") {
+  Graph<int> g{};
+  for (int i = 0; i < 3; i++) {
+    g.add_vertex(i);
+  }
+  g.add_edge(0, 1, 2);
+  g.add_edge(0, 2, 4);
+  g.add_edge(1, 2, 1);
+  
+  vector<int> asVI = find_shortest_path_dijkstra(g, 0, 2);
+  vector<int> correctXI{0, 2}; 
+  REQUIRE(asVI == correctXI);
+
+}

@@ -2,12 +2,22 @@
 
 ### Team member: Boyuan Zheng, Jeff Zou, Kaiwen Ren, Lingxiang Cai
 
+![Picture][cs225-final-pseudoCode/finalPic.png "pic"]
+![preview][/ "finalPic"]
+
 ## Project Summary
 
-Our project uses the "openflight" datasets to calculate the shortest path traveling between two airports and generates a visualization of our result.
+Our project uses the "openflight" datasets to calculate the shortest path traveling between two airports and generates a visualization of our result. 
+
+We use the A* search algorithm, using the euclidean distance as the weights of our edges and as the approximated distance to destination in our A* search procedure. 
+
+We also try different approaches such as Dijkstra's and BFS to compare the trade-offs between different algorithms. 
+
+And we use prim's algorithm to optimize our image.
 
 ## Deliverables
-- [Presentation](https://www.youtube.com/watch?v=dQw4w9WgXcQ)
+- [Presentation video](https://www.youtube.com/watch?v=dQw4w9WgXcQ)
+- [Presentation slides](https://docs.google.com/presentation/d/1DUc7WUnn43Rt1Ul_V4eLH_oWoyoy5Mtpffktlazd7Zg/edit#slide=id.g1b506828009_1_7)
 - [Report](https://docs.google.com/document/d/1UQiLYt6gcJrWr5xuSKkuioCOHEaB_xroA0EShy5fWwg/edit?usp=sharing)
 
 ## File Structure
@@ -47,7 +57,7 @@ Our project uses the "openflight" datasets to calculate the shortest path travel
 
 ## Data
 
-Our test data was taken using /* TBD */, stored in the `data/` directory.
+Our data was stored in the `data/` directory.
 
 1. [Airlines](https://openflights.org/data.html)
     - comma separated entries in `.csv` format containing data about airline information, routes, airports, etc.
