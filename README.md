@@ -17,7 +17,7 @@ And we use prim's algorithm to optimize our image.
 ## Deliverables
 - [Presentation video](https://www.youtube.com/watch?v=dQw4w9WgXcQ)
 - [Presentation slides](https://docs.google.com/presentation/d/1DUc7WUnn43Rt1Ul_V4eLH_oWoyoy5Mtpffktlazd7Zg/edit#slide=id.g1b506828009_1_7)
-- [Report](https://docs.google.com/document/d/1UQiLYt6gcJrWr5xuSKkuioCOHEaB_xroA0EShy5fWwg/edit?usp=sharing)
+- [Report](documents/results.md)
 
 ## File Structure
 - `cs225-final-pseudoCode`
