@@ -408,12 +408,16 @@ TEST_CASE("Prims basics", "[Algorithms][Prims]") {
   Graph<char> result{};
   prims(g, 'A', result);
 
+  vector<typename Graph<char>::Edge> edges;
+  result.get_all_edges(edges);
+  REQUIRE(edges.size() == 5);
+
   REQUIRE(result.get_edge_weight('A', 'B') == 2);
-  REQUIRE_FALSE(result.contains_edge('A', 'D'));
-  REQUIRE_FALSE(result.contains_edge('A', 'F'));
   REQUIRE(result.get_edge_weight('B', 'D') == 5);
-  REQUIRE_FALSE(result.contains_edge('B', 'C'));
   REQUIRE(result.get_edge_weight('D', 'E') == 8);
   REQUIRE(result.get_edge_weight('D', 'F') == 9);
   REQUIRE(result.get_edge_weight('E', 'C') == 11);
+  REQUIRE_FALSE(result.contains_edge('B', 'C'));
+  REQUIRE_FALSE(result.contains_edge('A', 'D'));
+  REQUIRE_FALSE(result.contains_edge('A', 'F'));
 }
