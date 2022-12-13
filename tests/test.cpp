@@ -326,7 +326,7 @@ TEST_CASE("Airport: Dijkstra find shortest path", "[Algorithms]"
   }
 }
 
-TEST_CASE("Dijkstra: basic", "[Dijkstra]") {
+TEST_CASE("Dijkstra: basic", "[Algorithms][Dijkstra]") {
   Graph<int> g{};
 
   for (int i = 0; i < 6; i++) {
@@ -340,14 +340,13 @@ TEST_CASE("Dijkstra: basic", "[Dijkstra]") {
   g.add_edge(3, 5, 5);
   g.add_edge(1, 4, 3);
   g.add_edge(4, 5, 8);
-  
-  vector<int> djI = find_shortest_path_dijkstra(g, 0, 5);
-  vector<int> correctVII{0, 2, 3, 5}; 
-  REQUIRE(djI == correctVII);
 
+  vector<int> djI = find_shortest_path_dijkstra(g, 0, 5);
+  vector<int> correctVII{0, 2, 3, 5};
+  REQUIRE(djI == correctVII);
 }
 
-TEST_CASE("Dijkstra: basic2", "[Dijkstra]") {
+TEST_CASE("Dijkstra: basic2", "[Algorithms][Dijkstra]") {
   Graph<int> g{};
   for (int i = 0; i < 3; i++) {
     g.add_vertex(i);
@@ -355,13 +354,13 @@ TEST_CASE("Dijkstra: basic2", "[Dijkstra]") {
   g.add_edge(0, 1, 2);
   g.add_edge(0, 2, 4);
   g.add_edge(1, 2, 1);
-  
+
   vector<int> djII = find_shortest_path_dijkstra(g, 0, 2);
-  vector<int> correctVII{0, 2}; 
+  vector<int> correctVII{0, 2};
   REQUIRE(djII == correctVII);
 }
 
-TEST_CASE("A star: basic", "[Astar]") {
+TEST_CASE("A star: basic", "[Algorithms][Astar]") {
   Graph<int> g{};
   for (int i = 0; i < 6; i++) {
     g.add_vertex(i);
@@ -374,13 +373,13 @@ TEST_CASE("A star: basic", "[Astar]") {
   g.add_edge(3, 5, 5);
   g.add_edge(1, 4, 3);
   g.add_edge(4, 5, 8);
-  
+
   vector<int> asV = find_shortest_path_dijkstra(g, 0, 5);
-  vector<int> correctX{0, 2, 3, 5}; 
+  vector<int> correctX{0, 2, 3, 5};
   REQUIRE(asV == correctX);
 }
 
-TEST_CASE("A star: basic2", "[Astar]") {
+TEST_CASE("A star: basic2", "[Algorithms][Astar]") {
   Graph<int> g{};
   for (int i = 0; i < 3; i++) {
     g.add_vertex(i);
@@ -388,9 +387,33 @@ TEST_CASE("A star: basic2", "[Astar]") {
   g.add_edge(0, 1, 2);
   g.add_edge(0, 2, 4);
   g.add_edge(1, 2, 1);
-  
-  vector<int> asVI = find_shortest_path_dijkstra(g, 0, 2);
-  vector<int> correctXI{0, 2}; 
-  REQUIRE(asVI == correctXI);
 
+  vector<int> asVI = find_shortest_path_dijkstra(g, 0, 2);
+  vector<int> correctXI{0, 2};
+  REQUIRE(asVI == correctXI);
+}
+
+TEST_CASE("Prims basics", "[Algorithms][Prims]") {
+  Graph<char> g{};
+
+  g.add_edge('A', 'B', 2);
+  g.add_edge('A', 'D', 17);
+  g.add_edge('A', 'F', 16);
+  g.add_edge('B', 'D', 5);
+  g.add_edge('B', 'C', 15);
+  g.add_edge('D', 'E', 8);
+  g.add_edge('D', 'F', 9);
+  g.add_edge('E', 'C', 11);
+
+  Graph<char> result{};
+  prims(g, 'A', result);
+
+  REQUIRE(result.get_edge_weight('A', 'B') == 2);
+  REQUIRE_FALSE(result.contains_edge('A', 'D'));
+  REQUIRE_FALSE(result.contains_edge('A', 'F'));
+  REQUIRE(result.get_edge_weight('B', 'D') == 5);
+  REQUIRE_FALSE(result.contains_edge('B', 'C'));
+  REQUIRE(result.get_edge_weight('D', 'E') == 8);
+  REQUIRE(result.get_edge_weight('D', 'F') == 9);
+  REQUIRE(result.get_edge_weight('E', 'C') == 11);
 }
