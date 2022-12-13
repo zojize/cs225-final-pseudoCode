@@ -16,7 +16,7 @@ And we use prim's algorithm to optimize our image.
 
 ## Deliverables
 
-- [Presentation video](https://www.youtube.com/watch?v=dQw4w9WgXcQ)
+- [Presentation video](https://drive.google.com/file/d/1yyzdkYwpTbx3do5HNroyH5byyaNZx5Kg/view?usp=share_link)
 - [Presentation slides](https://docs.google.com/presentation/d/1DUc7WUnn43Rt1Ul_V4eLH_oWoyoy5Mtpffktlazd7Zg/edit#slide=id.g1b506828009_1_7)
 - [Report](documents/results.md)
 
