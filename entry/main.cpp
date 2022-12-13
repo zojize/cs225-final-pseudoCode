@@ -2,10 +2,10 @@
 #include "Algorithms.h"
 #include "Canvas.h"
 #include "DisjointSets.h"
+#include "Heap.h"
 #include "SvgCanvas.h"
 #include "Vector2d.h"
 #include "cs225/RGB_HSL.h"
-#include "Heap.h"
 #include "utils.h"
 
 #include "getopt.h"
@@ -127,10 +127,13 @@ int main(int argc, char *argv[]) {
     cerr << "Must provide both SOURCE_AIRPORT and DESTINATION_AIRPORT.";
     return 1;
   }
-  if (prims && argc - optind >= 2)
+
+  if (prims && (argc - optind >= 2))
     source = argv[optind + 1];
-  else
+  else if (prims)
     source = "lax";
+  else
+    source = argv[optind];
   source = lowercase(source);
   if (!prims) {
     dest = argv[optind + 1];
