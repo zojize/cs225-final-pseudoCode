@@ -5,6 +5,7 @@
 #include "SvgCanvas.h"
 #include "Vector2d.h"
 #include "cs225/RGB_HSL.h"
+#include "Heap.h"
 #include "utils.h"
 
 #include "getopt.h"
@@ -194,7 +195,7 @@ int main(int argc, char *argv[]) {
                      m_airports[to_string(edges[i].destination.id)]);
     }
     int connected_components = dset.size_sets(true);
-    // cout << "comps: " << connected_components << endl;
+    cout << "comps: " << connected_components << endl;
 
     cs225::hslaColor hsl{0, 0.8, 0.6, 1};
     string *colors = new string[connected_components];
@@ -279,15 +280,18 @@ int main(int argc, char *argv[]) {
   }
 
   canvas.attrs["stroke"] = "#ff0000";
+  canvas.attrs["stroke-width"] = "5";
   canvas.attrs["fill"] = "none";
   for (size_t i = 0; i < search_result.size() - 1; i++) {
     draw_route(canvas, search_result[i], search_result[i + 1]);
   }
+  canvas.attrs.erase("stroke-width");
 
   canvas.attrs["fill"] = "#ffffff";
   canvas.attrs["stroke"] = "#000000";
   canvas.attrs["font-family"] = "Arial, Helvetica, sans-serif";
   canvas.attrs["font-weight"] = "bold";
+  canvas.attrs["font-size"] = "30";
   for (size_t i = 0; i < search_result.size(); i++) {
     Airport const& a = search_result[i];
     Vector2d<double> p = lat_lon_to_offsets(a.latitude, a.longitude,
@@ -296,6 +300,7 @@ int main(int argc, char *argv[]) {
   }
   canvas.attrs.erase("font-family");
   canvas.attrs.erase("font-weight");
+  canvas.attrs.erase("font-size");
 
   canvas.write_to_file(outfile);
 
