@@ -137,9 +137,9 @@ Our data was stored in the `data/` directory.
 
 - The airports' data is used as the vertices for the graph. It will be storing the airport's `Airport ID, Name, City, Country, Longitude, Altitude`. The routes data is used as edges for our graph, and the euclidean distance between the source and destination is used as the weight on the edges.
 
-## Preparing Your Code for Testing
+## Running the CLI and tests
 
-We are using CMake to test our code, before you run the test, you should complete following process in your terminal:
+We are using CMake to test our code, you should complete following process in your terminal:
 
 ```
 mkdir build
@@ -152,7 +152,24 @@ This process will create a build folder, and you should enter the build director
 cmake ..
 ```
 
-## Test
+### CLI
+
+```
+make main
+```
+
+This command builds the entry file `main.cpp`, run `./main` to see the full usage prompt.
+
+```bash
+> ./main
+Finds the shortest path between airports using either A* or Dijkstra's algorithm.
+
+USAGE:
+                        ./main [OPTIONS] SOURCE_AIRPORT DESTINATION_AIRPORT
+                        ./main prims [SOURCE_AIRPORT] [OPTIONS]
+```
+
+### Test
 
 `test.cpp` is the file that contains our test cases. To use the full test:
 
