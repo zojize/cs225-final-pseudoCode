@@ -111,6 +111,14 @@ And we use prim's algorithm to optimize our image.
     
     - Using the prims algorithm in MST, we only need to know the weight of edges(distance between nodes). By using PriorityQueue to find the shortest path in each nodes, by adding up we can find the shortest path between the src node to dst node.
         - prims
+       
+- Canvas: Visualize the route between the two airports by building a canvas
+    - default constructor
+    - line
+    - fill_rect
+    - writeToFile
+    - _plot
+    - _mix
 
 ## Data
 
