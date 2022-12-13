@@ -8,7 +8,7 @@
 
 Our project uses the "openflight" datasets to calculate the shortest path traveling between two airports and generates a visualization of our result. 
 
-We use the A* search algorithm, using the euclidean distance as the weights of our edges and as the approximated distance to destination in our A* search procedure. 
+We use the A* search algorithm, using the euclidean distance as the weights of our edges and as the approximated distance to destination in our A* search procedure.We also use prims algorithm as a main search algorithm, by using PriorityQueue to find the best path for each two nodes. 
 
 We also try different approaches such as Dijkstra's and BFS to compare the trade-offs between different algorithms. 
 
@@ -82,7 +82,26 @@ And we use prim's algorithm to optimize our image.
 - Route: used in build graph method for edge construction
     - stored airline_id, source_airport_id, destination_airport_id
     - rewrite operator to use in build graph method
-    - constructor: accept the input listed above and assign them to the class variables
+    - constructor: accept the input listed above and assign them to the class
+    variables
+    
+- Algorithm: 
+    -BFS:
+        Using the Labels to determine the weight of edges, after set the label of       edges. Using queue to travesal the graph and find the shortest way.
+        -get_label
+        -set_label
+        -bfs_walk_impl
+        -bfs_init
+        
+    -A* search algorithm：
+        Since dijkstra is the basic algorithm of A*, so we implant the A* on the basis of dijkstra. 
+        for dijkstra, we using PriorityQueue to find the shoortest way between nodes, and caclulate the weight(from src to dst) each steep. we will get the node weight as total distance and find the shortest path.
+        for A*, we are doing most of the part same, but we need to estimate the Euclidean distance from the current point to the end point, which help algorithm find the shortest path more accurate.
+        -find_shortest_path_dijkstra
+        -find_shortest_path_A_star
+    -Prims
+        Using the prims algorithm in MST, we only need to know the weight of edges(distance between nodes). By using PriorityQueue to find the shortest path in each nodes, by adding up we can find the shortest path between the src node to dst node.
+        -prims
 
 ## Data
 
