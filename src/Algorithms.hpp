@@ -1,3 +1,5 @@
+// #include "Heap.h"
+
 #include <limits>
 #include <queue>
 #include <stdexcept>
@@ -306,19 +308,23 @@ std::vector<T> Algorithms::find_shortest_path_A_star(Graph<T> const& g,
 
 template <typename T>
 void Algorithms::prims(Graph<T> const& g, T const& start, Graph<T>& out) {
-  unordered_map<T, double> d;
   unordered_map<T, T> p;
+  unordered_map<T, double> d;
 
   vector<T> vertices;
   g.get_all_vertices(vertices);
   for (T const& v : vertices) {
     d[v] = numeric_limits<double>::max();
   }
-
-  priority_queue min_heap(
-      vertices.begin(), vertices.end(),
-      [d](T const& l, T const& r) { return d.at(l) > d.at(r); });
   d[start] = 0;
+
+  struct lt {
+    unordered_map<T, double> const& d;
+    lt(unordered_map<T, double> const& d) : d(d) {}
+    bool operator()(T const& l, T const& r) const { return d.at(l) > d.at(r); };
+  };
+  priority_queue min_heap(vertices.begin(), vertices.end(), lt(d));
+  // Heap<T, lt> mh(vertices, lt(d));
 
   double weight;
   for (size_t i = 0; i < vertices.size(); i++) {
@@ -333,6 +339,10 @@ void Algorithms::prims(Graph<T> const& g, T const& start, Graph<T>& out) {
         continue;
       if ((weight = g.get_edge_weight(m, v)) < d[v]) {
         d[v] = weight;
+        // https://stackoverflow.com/a/5811888/14835397
+        std::make_heap(const_cast<T *>(&min_heap.top()),
+                       const_cast<T *>(&min_heap.top()) + min_heap.size(),
+                       lt(d));
         p[v] = m;
       }
     }

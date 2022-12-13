@@ -115,7 +115,7 @@ inline Vector2d<double> bezier_handler(Vector2d<double> const& vl,
   // dir *= std::pow(dir.dot(RIGHT), 2) * sqrt(mag);
   dir *= dir.dot(RIGHT) * sqrt(mag);
   // yep, this totally feels right to me
-  auto h1 = vl + dir.rotate(-M_PI_2) * 5;
+  auto h1 = vl + dir.rotate(-M_PI_2) * 4;
   auto h2 = h1 + diff;
   return (h1 + h1 + diff) / 2;
 }
